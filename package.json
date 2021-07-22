@@ -1,0 +1,31 @@
+{
+  "name": "cyrilmechain_7_22072021",
+  "description": "Projet 7 formation OC",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "sass": "sass --watch ./scss/bootstrap.scss:./public/css/bootstrap.css",
+    "sass mini": "sass --watch ./scss/bootstrap.scss:./public/css/bootstrap.css --style compressed",
+    "prefix": "postcss ./public/css/bootstrap.css --use autoprefixer -d ./public/css/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MecyDev/CyrilMechain_7_22072021.git"
+  },
+  "author": "MecyDev",
+  "license": "ISC",
+  "browserslist": "last 4 versions",
+  "bugs": {
+    "url": "https://github.com/MecyDev/CyrilMechain_7_22072021/issues"
+  },
+  "homepage": "https://github.com/MecyDev/CyrilMechain_7_22072021#readme",
+  "dependencies": {
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.31.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4"
+  }
+}
