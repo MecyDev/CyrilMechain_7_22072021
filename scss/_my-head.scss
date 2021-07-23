@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+.my-heading {
+  &--h1 {
+    font-family: DM Sans;
+    font-weight: bold;
+    font-size: 2.25rem;
+    line-height: 2.9375rem;
+    color: #d04f4f;
+  }
+}
