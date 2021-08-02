@@ -81,8 +81,7 @@
                                 aria-expanded="false" contentEditable="true">
                                 Ingrédients
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
+                            <div id="ingredients" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             </div>
                         </div>
                         <div class="btn-group mr-3">
@@ -92,38 +91,8 @@
                                 aria-expanded="false" contentEditable="true">
                                 Appareil
                             </button>
-                            <div class="dropdown-menu dropdown-menu--success" aria-labelledby="dropdownMenuButton">
-                                <ul class="list-group list-group-horizontal-lg">
-                                    <li class="list-group-item w-100 border-0 bg-transparent mr-4">
-                                        <a class="dropdown-item" href="#">Lait de coco</a>
-                                    </li>
-                                    <li class="list-group-item w-100 border-0 bg-transparent mr-4">
-                                        <a class="dropdown-item" href="#">Jus de citron</a>
-                                    </li>
-                                    <li class="list-group-item w-100 border-0 bg-transparent">
-                                        <a class="dropdown-item" href="#">Crème de coco</a>
-                                    </li>
-                                </ul>
-                                <ul class="list-group list-group-horizontal-lg">
-                                    <li class="list-group-item w-100 border-0 bg-transparent">An item</li>
-                                    <li class="list-group-item w-100 border-0 bg-transparent">A second item</li>
-                                    <li class="list-group-item w-100 border-0 bg-transparent">A third item</li>
-                                </ul>
-                                <ul class="list-group list-group-horizontal-lg">
-                                    <li class="list-group-item w-100 border-0 bg-transparent">An item</li>
-                                    <li class="list-group-item w-100 border-0 bg-transparent">A second item</li>
-                                    <li class="list-group-item w-100 border-0 bg-transparent">A third item</li>
-                                </ul>
-                                <ul class="list-group list-group-horizontal-lg">
-                                    <li class="list-group-item w-100 border-0 bg-transparent">An item</li>
-                                    <li class="list-group-item w-100 border-0 bg-transparent">A second item</li>
-                                    <li class="list-group-item w-100 border-0 bg-transparent">A third item</li>
-                                </ul>
-                                <ul class="list-group list-group-horizontal-lg">
-                                    <li class="list-group-item w-100 border-0 bg-transparent">An item</li>
-                                    <li class="list-group-item w-100 border-0 bg-transparent">A second item</li>
-                                    <li class="list-group-item w-100 border-0 bg-transparent">A third item</li>
-                                </ul>
+                            <div id="appliance" class="dropdown-menu dropdown-menu--success"
+                                aria-labelledby="dropdownMenuButton">
                             </div>
                         </div>
 
@@ -133,8 +102,8 @@
                                 aria-expanded="false" contentEditable="true">
                                 Ustensiles
                             </button>
-                            <div class="dropdown-menu dropdown-menu--danger" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
+                            <div id="ustensils" class="dropdown-menu dropdown-menu--danger"
+                                aria-labelledby="dropdownMenuButton">
                             </div>
                         </div>
                     </div>
@@ -195,6 +164,7 @@
 
 
     <!-- js for Bootstrap (delete if not use) -->
+    <script src='/js/recipes/recipes.js'></script>
     <script src='/js/interface.js'></script>
 </body>
 

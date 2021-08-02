@@ -10010,4 +10010,8 @@ h3 {
   background-color: #ed6454;
 }
 
+.my-list {
+  column-count: 3;
+}
+
 /*# sourceMappingURL=bootstrap.css.map */
