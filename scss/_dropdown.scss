@@ -130,7 +130,7 @@
 // `<button>`-specific styles are denoted with `// For <button>s`
 .dropdown-item {
   display: block;
-  width: 100%; // For `<button>`s
+  width: 0; // For `<button>`s
 
   clear: both;
   font-weight: $font-weight-normal;
