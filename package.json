@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "sass": "sass --watch ./scss/bootstrap.scss:./public/css/bootstrap.css",
-    "sass mini": "sass --watch ./scss/bootstrap.scss:./public/css/bootstrap.css --style compressed",
-    "prefix": "postcss ./public/css/bootstrap.css --use autoprefixer -d ./public/css/"
+    "sass": "sass --watch ./scss/style.scss:./public/css/bootstrap.css",
+    "sass mini": "sass --watch ./scss/style.scss:./public/css/bootstrap.css --style compressed",
+    "prefix": "postcss ./public/css/style.css --use autoprefixer -d ./public/css/"
   },
   "repository": {
     "type": "git",

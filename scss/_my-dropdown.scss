@@ -1,0 +1,19 @@
+.my-dropdown {
+  &-toggle::after {
+    position: absolute;
+    border: none !important;
+    content: '';
+    background-image: url('/logo/chevdown.svg');
+    background-repeat: no-repeat;
+    background-size: 16px 11px;
+    width: 16px;
+    height: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 18px;
+  }
+
+  .btn-group.show &-toggle::after {
+    background-image: url('/logo/chevup.svg');
+  }
+}
