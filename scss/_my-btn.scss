@@ -7,13 +7,35 @@
   font-size: 1.125rem;
   line-height: 1.375rem;
   text-align: left;
+  padding-left: 20px;
   border: none;
 
-  &-success {
-    background-color: #68d9a4;
+  &--light {
+    color: rgba(255, 255, 255, 0.5) !important;
   }
+}
 
-  &-danger {
-    background-color: #ed6454;
-  }
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:not(:disabled):not(.disabled):active,
+.btn-primary:not(:disabled):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle {
+  background-color: $blue;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:not(:disabled):not(.disabled):active,
+.btn-success:not(:disabled):not(.disabled).active,
+.show > .btn-success.dropdown-toggle {
+  background-color: $green;
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:focus,
+.btn-danger:not(:disabled):not(.disabled):active,
+.btn-danger:not(:disabled):not(.disabled).active,
+.show > .btn-danger.dropdown-toggle {
+  background-color: $red;
 }
