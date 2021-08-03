@@ -42,13 +42,10 @@ recipes.forEach((e) => {
   }
 })
 
-console.log(appliance)
-console.log(ustensils)
-
 // create ul of ingredient
 
 const listIngredient = `
-<ul class="my-list">
+<ul class="list-group">
 ${ingredients
   .map(
     (e) =>
@@ -58,8 +55,27 @@ ${ingredients
 </ul>
 `
 
+const listIngre = (function () {
+  let array = ''
+  let pointer = 2
+  let j = 0
+  for (let i = 0; i < ingredients.length; i += 3) {
+    let t = `<ul class="list-group list-group-horizontal">`
+    for (j; j <= pointer; j += 1) {
+      t += `<li class="list-group-item w-100 border-0 bg-transparent"><a class="dropdown-item" href="#">${ingredients[j]}</a></li>`
+    }
+    t += `</ul>`
+    pointer += 3
+    if (pointer > ingredients.length) {
+      pointer = ingredients.length - 1
+    }
+    array += t
+  }
+  return array
+})()
+
 const listApp = `
-<ul class="my-list">
+<ul class="list-group">
 ${appliance
   .map(
     (e) =>
@@ -83,6 +99,6 @@ const dropIngre = document.querySelector('#ingredients')
 const dropApp = document.querySelector('#appliance')
 const dropUsten = document.querySelector('#ustensils')
 
-dropIngre.innerHTML = listIngredient
-dropApp.innerHTML = listApp
-dropUsten.innerHTML = listUsten
+dropIngre.innerHTML = listIngre
+// dropApp.innerHTML = listApp
+// dropUsten.innerHTML = listUsten
