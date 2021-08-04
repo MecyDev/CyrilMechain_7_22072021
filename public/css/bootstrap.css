@@ -9990,6 +9990,9 @@ h3 {
 .my-btn--light {
   color: rgba(255, 255, 255, 0.5) !important;
 }
+.my-btn input {
+  display: none;
+}
 
 .btn-primary:hover,
 .btn-primary:focus,
