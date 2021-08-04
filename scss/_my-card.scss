@@ -1,0 +1,41 @@
+.my-card {
+  width: 23.75rem;
+  height: 364px;
+
+  &-title {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+  }
+
+  &-text {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+  }
+
+  &-desc {
+    width: 10.6875rem;
+    height: 109px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 0.75rem;
+    line-height: 100%;
+  }
+
+  ul {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 0.75rem;
+    line-height: 0.875rem;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+  }
+}
