@@ -9991,6 +9991,19 @@ h3 {
 .my-btn--light {
   color: rgba(255, 255, 255, 0.5) !important;
 }
+.my-btn--tag {
+  height: 37px;
+  padding: 2px 20px;
+  margin-bottom: 15px;
+}
+.my-btn--tag span {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 0.875rem;
+  line-height: 1.0625rem;
+  margin-right: 8px;
+}
 .my-btn input {
   display: none;
 }
@@ -10018,6 +10031,10 @@ h3 {
 .btn-danger:not(:disabled):not(.disabled).active,
 .show > .btn-danger.dropdown-toggle {
   background-color: #ed6454;
+}
+
+.testt {
+  width: 67px;
 }
 
 .my-dropdown-toggle::after {
@@ -10082,6 +10099,13 @@ h3 {
   list-style: none;
   margin-left: 0;
   padding-left: 0;
+}
+.my-card span {
+  margin-left: 7px;
+}
+
+.my-section-advance {
+  height: 100px;
 }
 
 /*# sourceMappingURL=bootstrap.css.map */

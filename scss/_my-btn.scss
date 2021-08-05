@@ -14,10 +14,28 @@
     color: rgba(255, 255, 255, 0.5) !important;
   }
 
+  &--tag {
+    height: 37px;
+    padding: 2px 20px;
+
+    margin-bottom: 15px;
+
+    span {
+      font-family: Lato;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 0.875rem;
+      line-height: 1.0625rem;
+      margin-right: 8px;
+    }
+  }
+
   input {
     display: none;
   }
 }
+
+//special bootstrap surcharge
 
 .btn-primary:hover,
 .btn-primary:focus,
@@ -42,4 +60,8 @@
 .btn-danger:not(:disabled):not(.disabled).active,
 .show > .btn-danger.dropdown-toggle {
   background-color: $red;
+}
+
+.testt {
+  width: 67px;
 }
