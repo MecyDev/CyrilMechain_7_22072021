@@ -6,7 +6,6 @@ dropdown.forEach(
       const dropdownOpen = document.querySelectorAll('.flex-fill')
       const span = e.querySelector('span')
       const type = span.innerText
-      console.log(type)
       if (e.parentElement.classList.contains('flex-fill', 'show')) {
         e.parentElement.classList.remove('flex-fill', 'show')
         e.nextElementSibling.style.display = 'none'
@@ -68,6 +67,8 @@ const appliances = []
 const ustensils = []
 
 recipes.forEach((e) => {
+  const recipe = new Recipe(e)
+  document.querySelector('#test').innerHTML += recipe.card()
   e.ingredients.forEach((i) => {
     if (!ingredients.includes(i.ingredient)) {
       ingredients.push(i.ingredient)

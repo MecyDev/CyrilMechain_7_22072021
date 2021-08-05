@@ -10082,8 +10082,8 @@ h3 {
   line-height: 1.375rem;
 }
 .my-card-desc {
-  width: 10.6875rem;
-  height: 109px;
+  max-width: 10.6875rem;
+  height: 89px;
   font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: normal;
