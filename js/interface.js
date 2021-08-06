@@ -140,3 +140,35 @@ listTags.addEventListener('click', (e) => {
     }
   }
 })
+
+// function search1
+let c
+
+function myFilter(ingr) {
+  if (ingr.includes(c)) {
+    return true
+  }
+  return false
+}
+
+const mainSearch = document.querySelector('#search')
+
+mainSearch.addEventListener('input', () => {
+  if (mainSearch.value.length > 2) {
+    ingredients.forEach((e) => {
+      if (e.includes(mainSearch.value)) {
+        console.log('ouiiiiiiiiii')
+      }
+      const arr = e.split(' ')
+      arr.forEach((i) => {
+        if (i.startsWith(mainSearch.value)) {
+          c = i
+          const test = ingredients.filter(myFilter)
+          document.querySelector('#ingredients').innerHTML = createList(test)
+        } else {
+          c = ''
+        }
+      })
+    })
+  }
+})
