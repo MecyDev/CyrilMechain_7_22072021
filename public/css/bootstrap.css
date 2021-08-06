@@ -10105,7 +10105,7 @@ h3 {
 }
 
 .my-section-advance {
-  height: 100px;
+  min-height: 100px;
 }
 
 /*# sourceMappingURL=bootstrap.css.map */

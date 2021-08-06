@@ -9,15 +9,15 @@ dropdown.forEach(
       if (e.parentElement.classList.contains('flex-fill', 'show')) {
         e.parentElement.classList.remove('flex-fill', 'show')
         e.nextElementSibling.style.display = 'none'
-        if (type === 'Recherche un ingrédient') {
+        if (type !== 'Ingrédient') {
           span.textContent = 'Ingrédients'
           e.classList.remove('my-btn--light')
         }
-        if (type === 'Recherche un appareil') {
+        if (type !== 'Recherche un appareil') {
           span.textContent = 'Appareil'
           e.classList.remove('my-btn--light')
         }
-        if (type === 'Recherche un ustensile') {
+        if (type !== 'Recherche un ustensile') {
           span.textContent = 'Ustensiles'
           e.classList.remove('my-btn--light')
         }
@@ -43,15 +43,15 @@ dropdown.forEach(
           const type2 = span2.innerText
           i.querySelector('.dropdown-menu').style.display = 'none'
           i.classList.remove('flex-fill', 'show')
-          if (type2 === 'Recherche un ingrédient') {
+          if (type2 !== 'Recherche un ingrédient') {
             span2.textContent = 'Ingrédients'
             i.querySelector('button').classList.remove('my-btn--light')
           }
-          if (type2 === 'Recherche un appareil') {
+          if (type2 !== 'Recherche un appareil') {
             span2.textContent = 'Appareil'
             i.querySelector('button').classList.remove('my-btn--light')
           }
-          if (type2 === 'Recherche un ustensile') {
+          if (type2 !== 'Recherche un ustensile') {
             span2.textContent = 'Ustensiles'
             i.querySelector('button').classList.remove('my-btn--light')
           }
@@ -108,3 +108,35 @@ function createList(list) {
 document.querySelector('#ingredients').innerHTML = createList(ingredients)
 document.querySelector('#appliances').innerHTML = createList(appliances)
 document.querySelector('#ustensils').innerHTML = createList(ustensils)
+
+// Select filter tags
+const items = document.querySelectorAll('.list-group-item')
+
+items.forEach((i) =>
+  i.addEventListener('click', () => {
+    document.querySelector('#forTags').innerHTML += `
+  <a class="btn btn-primary my-btn--tag text-center">
+    <span class="text-nowrap">${i.innerText}</span>
+    <svg class="flex-shrink-0" width="20" height="20" viewBox="0 0 20 20" fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+          d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+          fill="white" />
+    </svg>
+  </a>
+  `
+  })
+)
+
+// Close filters tags
+const listTags = document.querySelector('#forTags')
+
+listTags.addEventListener('click', (e) => {
+  if (e.target) {
+    if (e.target.nodeName === 'svg') {
+      e.target.parentNode.remove()
+    } else if (e.target.nodeName === 'path') {
+      e.target.parentNode.parentNode.remove()
+    }
+  }
+})
