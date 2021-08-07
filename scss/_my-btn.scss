@@ -38,6 +38,11 @@
   input {
     display: none;
   }
+
+  span {
+    display: block;
+    width: 100%;
+  }
 }
 
 //special bootstrap surcharge
@@ -70,6 +75,6 @@
   border-color: $red;
 }
 
-.testt {
-  width: 67px;
+[contenteditable] {
+  outline: 0px solid transparent;
 }

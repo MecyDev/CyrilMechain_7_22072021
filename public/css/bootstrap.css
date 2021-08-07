@@ -10011,6 +10011,10 @@ h3 {
 .my-btn input {
   display: none;
 }
+.my-btn span {
+  display: block;
+  width: 100%;
+}
 
 .btn-primary:hover,
 .btn-primary:focus,
@@ -10040,8 +10044,8 @@ h3 {
   border-color: #ed6454;
 }
 
-.testt {
-  width: 67px;
+[contenteditable] {
+  outline: 0px solid transparent;
 }
 
 .my-dropdown-toggle::after {
