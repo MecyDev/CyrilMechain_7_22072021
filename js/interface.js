@@ -12,16 +12,25 @@ dropdown.forEach(
           e.previousElementSibling.querySelector('span').textContent =
             'Ingrédients'
           e.previousElementSibling.classList.remove('my-btn--light')
+          e.previousElementSibling
+            .querySelector('span')
+            .setAttribute('contenteditable', 'false')
         }
         if (type === 'Recherche un appareil') {
           e.previousElementSibling.querySelector('span').textContent =
             'Appareil'
           e.previousElementSibling.classList.remove('my-btn--light')
+          e.previousElementSibling
+            .querySelector('span')
+            .setAttribute('contenteditable', 'false')
         }
         if (type === 'Recherche un ustensile') {
           e.previousElementSibling.querySelector('span').textContent =
             'Ustensiles'
           e.previousElementSibling.classList.remove('my-btn--light')
+          e.previousElementSibling
+            .querySelector('span')
+            .setAttribute('contenteditable', 'false')
         }
       } else {
         e.parentElement.classList.add('flex-fill', 'show')
@@ -30,16 +39,25 @@ dropdown.forEach(
           e.previousElementSibling.querySelector('span').textContent =
             'Recherche un ingrédient'
           e.previousElementSibling.classList.add('my-btn--light')
+          e.previousElementSibling
+            .querySelector('span')
+            .setAttribute('contenteditable', 'true')
         }
         if (type === 'Appareil') {
           e.previousElementSibling.querySelector('span').textContent =
             'Recherche un appareil'
           e.previousElementSibling.classList.add('my-btn--light')
+          e.previousElementSibling
+            .querySelector('span')
+            .setAttribute('contenteditable', 'true')
         }
         if (type === 'Ustensiles') {
           e.previousElementSibling.querySelector('span').textContent =
             'Recherche un ustensile'
           e.previousElementSibling.classList.add('my-btn--light')
+          e.previousElementSibling
+            .querySelector('span')
+            .setAttribute('contenteditable', 'true')
         }
       }
       if (dropdownOpen) {
@@ -51,14 +69,23 @@ dropdown.forEach(
           if (type2 === 'Recherche un ingrédient') {
             span2.querySelector('span').textContent = 'Ingrédients'
             i.querySelector('button').classList.remove('my-btn--light')
+            i.querySelector('button')
+              .querySelector('span')
+              .setAttribute('contenteditable', 'false')
           }
           if (type2 === 'Recherche un appareil') {
             span2.querySelector('span').textContent = 'Appareil'
             i.querySelector('button').classList.remove('my-btn--light')
+            i.querySelector('button')
+              .querySelector('span')
+              .setAttribute('contenteditable', 'false')
           }
           if (type2 === 'Recherche un ustensile') {
             span2.querySelector('span').textContent = 'Ustensiles'
             i.querySelector('button').classList.remove('my-btn--light')
+            i.querySelector('button')
+              .querySelector('span')
+              .setAttribute('contenteditable', 'false')
           }
         })
       }
