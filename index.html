@@ -65,10 +65,6 @@
         </section>
         <!-- End search input section-->
 
-        <!-- Section for tags-->
-        <section></section>
-        <!-- End section for tags-->
-
         <!-- Section for dropdows-->
         <section role="region" aria-label="Recherche avancé" class="mt-1 my-section-advance">
             <div class="container">
@@ -79,20 +75,24 @@
                 <div class="row">
                     <div class="col-10 d-flex">
                         <div class="btn-group mr-3">
-                            <button class="btn btn-primary my-btn dropdown-toggle my-dropdown-toggle shadow-none"
+                            <button type="button" class="btn btn-primary my-btn shadow-none"
+                                contentEditable="true">Ingrédients</button>
+                            <button
+                                class="btn btn-primary my-btn-toggle dropdown-toggle dropdown-toggle-split my-dropdown-toggle shadow-none"
                                 type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false" contentEditable="true">
-                                <span>Ingrédients</span>
+                                aria-expanded="false">
                             </button>
                             <div id="ingredients" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             </div>
                         </div>
                         <div class="btn-group mr-3">
+                            <button type="button" class="btn btn-success my-btn shadow-none text-white"
+                                contentEditable="true"><span>Appareil</span></button>
                             <button
-                                class="btn btn-success my-btn text-white dropdown-toggle my-dropdown-toggle shadow-none"
+                                class="btn btn-success my-btn-toggle dropdown-toggle dropdown-toggle-split my-dropdown-toggle shadow-none"
                                 type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false" contentEditable="true">
-                                <span>Appareil</span>
+                                <span class='sr-only'>Appareils</span>
                             </button>
                             <div id="appliances" class="dropdown-menu dropdown-menu--success"
                                 aria-labelledby="dropdownMenuButton">
@@ -100,10 +100,13 @@
                         </div>
 
                         <div class="btn-group">
-                            <button class="btn btn-danger my-btn dropdown-toggle my-dropdown-toggle shadow-none"
+                            <button type="button" class="btn btn-danger my-btn shadow-none text-white"
+                                contentEditable="true"><span>Ustensiles</span></button>
+                            <button <button
+                                class="btn btn-danger my-btn-toggle dropdown-toggle dropdown-toggle-split my-dropdown-toggle shadow-none"
                                 type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false" contentEditable="true">
-                                <span>Ustensiles</span>
+                                <span class="sr-only">Ustensiles</span>
                             </button>
                             <div id="ustensils" class="dropdown-menu dropdown-menu--danger"
                                 aria-labelledby="dropdownMenuButton">

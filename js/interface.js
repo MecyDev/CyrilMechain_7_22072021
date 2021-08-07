@@ -4,54 +4,53 @@ dropdown.forEach(
   (e) =>
     e.addEventListener('click', () => {
       const dropdownOpen = document.querySelectorAll('.flex-fill')
-      const span = e.querySelector('span')
-      const type = span.innerText
+      const type = e.previousElementSibling.textContent
       if (e.parentElement.classList.contains('flex-fill', 'show')) {
         e.parentElement.classList.remove('flex-fill', 'show')
         e.nextElementSibling.style.display = 'none'
-        if (type !== 'Ingrédient') {
-          span.textContent = 'Ingrédients'
-          e.classList.remove('my-btn--light')
+        if (type === 'Recherche un ingrédient') {
+          e.previousElementSibling.textContent = 'Ingrédients'
+          e.previousElementSibling.classList.remove('my-btn--light')
         }
-        if (type !== 'Recherche un appareil') {
-          span.textContent = 'Appareil'
-          e.classList.remove('my-btn--light')
+        if (type === 'Recherche un appareil') {
+          e.previousElementSibling.textContent = 'Appareil'
+          e.previousElementSibling.classList.remove('my-btn--light')
         }
-        if (type !== 'Recherche un ustensile') {
-          span.textContent = 'Ustensiles'
-          e.classList.remove('my-btn--light')
+        if (type === 'Recherche un ustensile') {
+          e.previousElementSibling.textContent = 'Ustensiles'
+          e.previousElementSibling.classList.remove('my-btn--light')
         }
       } else {
         e.parentElement.classList.add('flex-fill', 'show')
         e.nextElementSibling.style.display = 'block'
         if (type === 'Ingrédients') {
-          span.textContent = 'Recherche un ingrédient'
-          e.classList.add('my-btn--light')
+          e.previousElementSibling.textContent = 'Recherche un ingrédient'
+          e.previousElementSibling.classList.add('my-btn--light')
         }
         if (type === 'Appareil') {
-          span.textContent = 'Recherche un appareil'
-          e.classList.add('my-btn--light')
+          e.previousElementSibling.textContent = 'Recherche un appareil'
+          e.previousElementSibling.classList.add('my-btn--light')
         }
         if (type === 'Ustensiles') {
-          span.textContent = 'Recherche un ustensile'
-          e.classList.add('my-btn--light')
+          e.previousElementSibling.textContent = 'Recherche un ustensile'
+          e.previousElementSibling.classList.add('my-btn--light')
         }
       }
       if (dropdownOpen) {
         dropdownOpen.forEach((i) => {
-          const span2 = i.querySelector('span')
-          const type2 = span2.innerText
+          const span2 = i.firstElementChild
+          const type2 = span2.textContent
           i.querySelector('.dropdown-menu').style.display = 'none'
           i.classList.remove('flex-fill', 'show')
-          if (type2 !== 'Recherche un ingrédient') {
+          if (type2 === 'Recherche un ingrédient') {
             span2.textContent = 'Ingrédients'
             i.querySelector('button').classList.remove('my-btn--light')
           }
-          if (type2 !== 'Recherche un appareil') {
+          if (type2 === 'Recherche un appareil') {
             span2.textContent = 'Appareil'
             i.querySelector('button').classList.remove('my-btn--light')
           }
-          if (type2 !== 'Recherche un ustensile') {
+          if (type2 === 'Recherche un ustensile') {
             span2.textContent = 'Ustensiles'
             i.querySelector('button').classList.remove('my-btn--light')
           }

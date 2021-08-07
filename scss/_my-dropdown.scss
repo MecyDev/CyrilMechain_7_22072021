@@ -11,6 +11,7 @@
     top: 50%;
     transform: translateY(-50%);
     right: 18px;
+    z-index: 2;
   }
 
   .btn-group.show &-toggle::after {
