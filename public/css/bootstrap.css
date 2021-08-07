@@ -9977,7 +9977,7 @@ h3 {
 }
 
 .my-btn {
-  min-width: 170px;
+  min-width: 150px;
   min-height: 69px;
   font-family: "lato", sans-serif;
   font-style: normal;
@@ -9987,6 +9987,10 @@ h3 {
   text-align: left;
   padding-left: 20px;
   border: none;
+  color: white;
+}
+.my-btn-toggle {
+  max-width: 40px;
 }
 .my-btn--light {
   color: rgba(255, 255, 255, 0.5) !important;
@@ -10014,6 +10018,7 @@ h3 {
 .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   background-color: #3282f7;
+  border-color: #3282f7;
 }
 
 .btn-success:hover,
@@ -10022,6 +10027,7 @@ h3 {
 .btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle {
   background-color: #68d9a4;
+  border-color: #68d9a4;
 }
 
 .btn-danger:hover,
@@ -10031,6 +10037,7 @@ h3 {
 .btn-danger:not(:disabled):not(.disabled).active,
 .show > .btn-danger.dropdown-toggle {
   background-color: #ed6454;
+  border-color: #ed6454;
 }
 
 .testt {
@@ -10049,6 +10056,7 @@ h3 {
   top: 50%;
   transform: translateY(-50%);
   right: 18px;
+  z-index: 2;
 }
 .btn-group.show .my-dropdown-toggle::after {
   background-image: url("/logo/chevup.svg");

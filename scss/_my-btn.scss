@@ -1,5 +1,5 @@
 .my-btn {
-  min-width: 170px;
+  min-width: 150px;
   min-height: 69px;
   font-family: 'lato', sans-serif;
   font-style: normal;
@@ -9,6 +9,11 @@
   text-align: left;
   padding-left: 20px;
   border: none;
+  color: white;
+
+  &-toggle {
+    max-width: 40px;
+  }
 
   &--light {
     color: rgba(255, 255, 255, 0.5) !important;
@@ -43,6 +48,7 @@
 .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   background-color: $blue;
+  border-color: $blue;
 }
 
 .btn-success:hover,
@@ -51,6 +57,7 @@
 .btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle {
   background-color: $green;
+  border-color: $green;
 }
 
 .btn-danger:hover,
@@ -60,6 +67,7 @@
 .btn-danger:not(:disabled):not(.disabled).active,
 .show > .btn-danger.dropdown-toggle {
   background-color: $red;
+  border-color: $red;
 }
 
 .testt {
