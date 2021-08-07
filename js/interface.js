@@ -4,35 +4,41 @@ dropdown.forEach(
   (e) =>
     e.addEventListener('click', () => {
       const dropdownOpen = document.querySelectorAll('.flex-fill')
-      const type = e.previousElementSibling.textContent
+      const type = e.previousElementSibling.querySelector('span').textContent
       if (e.parentElement.classList.contains('flex-fill', 'show')) {
         e.parentElement.classList.remove('flex-fill', 'show')
         e.nextElementSibling.style.display = 'none'
         if (type === 'Recherche un ingrédient') {
-          e.previousElementSibling.textContent = 'Ingrédients'
+          e.previousElementSibling.querySelector('span').textContent =
+            'Ingrédients'
           e.previousElementSibling.classList.remove('my-btn--light')
         }
         if (type === 'Recherche un appareil') {
-          e.previousElementSibling.textContent = 'Appareil'
+          e.previousElementSibling.querySelector('span').textContent =
+            'Appareil'
           e.previousElementSibling.classList.remove('my-btn--light')
         }
         if (type === 'Recherche un ustensile') {
-          e.previousElementSibling.textContent = 'Ustensiles'
+          e.previousElementSibling.querySelector('span').textContent =
+            'Ustensiles'
           e.previousElementSibling.classList.remove('my-btn--light')
         }
       } else {
         e.parentElement.classList.add('flex-fill', 'show')
         e.nextElementSibling.style.display = 'block'
         if (type === 'Ingrédients') {
-          e.previousElementSibling.textContent = 'Recherche un ingrédient'
+          e.previousElementSibling.querySelector('span').textContent =
+            'Recherche un ingrédient'
           e.previousElementSibling.classList.add('my-btn--light')
         }
         if (type === 'Appareil') {
-          e.previousElementSibling.textContent = 'Recherche un appareil'
+          e.previousElementSibling.querySelector('span').textContent =
+            'Recherche un appareil'
           e.previousElementSibling.classList.add('my-btn--light')
         }
         if (type === 'Ustensiles') {
-          e.previousElementSibling.textContent = 'Recherche un ustensile'
+          e.previousElementSibling.querySelector('span').textContent =
+            'Recherche un ustensile'
           e.previousElementSibling.classList.add('my-btn--light')
         }
       }
@@ -43,15 +49,15 @@ dropdown.forEach(
           i.querySelector('.dropdown-menu').style.display = 'none'
           i.classList.remove('flex-fill', 'show')
           if (type2 === 'Recherche un ingrédient') {
-            span2.textContent = 'Ingrédients'
+            span2.querySelector('span').textContent = 'Ingrédients'
             i.querySelector('button').classList.remove('my-btn--light')
           }
           if (type2 === 'Recherche un appareil') {
-            span2.textContent = 'Appareil'
+            span2.querySelector('span').textContent = 'Appareil'
             i.querySelector('button').classList.remove('my-btn--light')
           }
           if (type2 === 'Recherche un ustensile') {
-            span2.textContent = 'Ustensiles'
+            span2.querySelector('span').textContent = 'Ustensiles'
             i.querySelector('button').classList.remove('my-btn--light')
           }
         })
@@ -61,25 +67,25 @@ dropdown.forEach(
 )
 
 // create ingredient list
-const ingredients = []
-const appliances = []
-const ustensils = []
+const allIngredients = []
+const allAppliances = []
+const allUstensils = []
 
 recipes.forEach((e) => {
   const recipe = new Recipe(e)
   document.querySelector('#test').innerHTML += recipe.card()
   e.ingredients.forEach((i) => {
-    if (!ingredients.includes(i.ingredient)) {
-      ingredients.push(i.ingredient)
+    if (!allIngredients.includes(i.ingredient)) {
+      allIngredients.push(i.ingredient)
     }
   })
   e.ustensils.forEach((u) => {
-    if (!ustensils.includes(u)) {
-      ustensils.push(u)
+    if (!allUstensils.includes(u)) {
+      allUstensils.push(u)
     }
   })
-  if (!appliances.includes(e.appliance)) {
-    appliances.push(e.appliance)
+  if (!allAppliances.includes(e.appliance)) {
+    allAppliances.push(e.appliance)
   }
 })
 
@@ -104,9 +110,9 @@ function createList(list) {
   return result
 }
 
-document.querySelector('#ingredients').innerHTML = createList(ingredients)
-document.querySelector('#appliances').innerHTML = createList(appliances)
-document.querySelector('#ustensils').innerHTML = createList(ustensils)
+document.querySelector('#ingredients').innerHTML = createList(allIngredients)
+document.querySelector('#appliances').innerHTML = createList(allUstensils)
+document.querySelector('#ustensils').innerHTML = createList(allUstensils)
 
 // Select filter tags
 const items = document.querySelectorAll('.list-group-item')
@@ -144,7 +150,7 @@ listTags.addEventListener('click', (e) => {
 let c
 
 function myFilter(ingr) {
-  if (ingr.includes(c)) {
+  if (ingr.toLowerCase().includes(c.toLowerCase())) {
     return true
   }
   return false
@@ -158,16 +164,8 @@ mainSearch.addEventListener('input', () => {
       if (e.includes(mainSearch.value)) {
         console.log('ouiiiiiiiiii')
       }
-      const arr = e.split(' ')
-      arr.forEach((i) => {
-        if (i.startsWith(mainSearch.value)) {
-          c = i
-          const test = ingredients.filter(myFilter)
-          document.querySelector('#ingredients').innerHTML = createList(test)
-        } else {
-          c = ''
-        }
-      })
     })
   }
 })
+
+// test champ advance search
