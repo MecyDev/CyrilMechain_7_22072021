@@ -160,7 +160,7 @@ const mainSearch = document.querySelector('#search')
 
 mainSearch.addEventListener('input', () => {
   if (mainSearch.value.length > 2) {
-    ingredients.forEach((e) => {
+    allIngredients.forEach((e) => {
       if (e.includes(mainSearch.value)) {
         console.log('ouiiiiiiiiii')
       }
