@@ -1,91 +1,87 @@
 const dropdown = document.querySelectorAll('#dropdownMenuButton')
 
+const nbIngredients = 3
+let menuSize = 'w-75'
+
+if (nbIngredients === 2) {
+  menuSize = 'w-50'
+} else if (nbIngredients < 2) {
+  menuSize = 'w-0'
+}
+
 dropdown.forEach(
   (e) =>
     e.addEventListener('click', () => {
-      const dropdownOpen = document.querySelectorAll('.flex-fill')
-      const type = e.previousElementSibling.querySelector('span').textContent
-      if (e.parentElement.classList.contains('flex-fill', 'show')) {
-        e.parentElement.classList.remove('flex-fill', 'show')
+      const dropdownOpen = document.querySelectorAll('.show')
+      let type = e.previousElementSibling.getAttribute('value')
+      if (type === null) {
+        type = e.previousElementSibling.getAttribute('placeholder')
+      }
+      if (e.parentElement.classList.contains('show')) {
+        e.parentElement.classList.remove(menuSize, 'show')
         e.nextElementSibling.style.display = 'none'
         if (type === 'Recherche un ingrédient') {
-          e.previousElementSibling.querySelector('span').textContent =
-            'Ingrédients'
-          e.previousElementSibling.classList.remove('my-btn--light')
-          e.previousElementSibling
-            .querySelector('span')
-            .setAttribute('contenteditable', 'false')
+          e.previousElementSibling.removeAttribute('placeholder')
+          e.previousElementSibling.disabled = true
+          e.previousElementSibling.setAttribute('value', 'Ingrédients')
         }
         if (type === 'Recherche un appareil') {
-          e.previousElementSibling.querySelector('span').textContent =
-            'Appareil'
-          e.previousElementSibling.classList.remove('my-btn--light')
-          e.previousElementSibling
-            .querySelector('span')
-            .setAttribute('contenteditable', 'false')
+          e.previousElementSibling.removeAttribute('placeholder')
+          e.previousElementSibling.disabled = true
+          e.previousElementSibling.setAttribute('value', 'Appareil')
         }
         if (type === 'Recherche un ustensile') {
-          e.previousElementSibling.querySelector('span').textContent =
-            'Ustensiles'
-          e.previousElementSibling.classList.remove('my-btn--light')
-          e.previousElementSibling
-            .querySelector('span')
-            .setAttribute('contenteditable', 'false')
+          e.previousElementSibling.removeAttribute('placeholder')
+          e.previousElementSibling.disabled = true
+          e.previousElementSibling.setAttribute('value', 'Ustensiles')
         }
       } else {
-        e.parentElement.classList.add('flex-fill', 'show')
+        e.parentElement.classList.add(menuSize, 'show')
         e.nextElementSibling.style.display = 'block'
         if (type === 'Ingrédients') {
-          e.previousElementSibling.querySelector('span').textContent =
+          e.previousElementSibling.removeAttribute('value')
+          e.previousElementSibling.disabled = false
+          e.previousElementSibling.setAttribute(
+            'placeholder',
             'Recherche un ingrédient'
-          e.previousElementSibling.classList.add('my-btn--light')
-          e.previousElementSibling
-            .querySelector('span')
-            .setAttribute('contenteditable', 'true')
+          )
         }
         if (type === 'Appareil') {
-          e.previousElementSibling.querySelector('span').textContent =
+          e.previousElementSibling.removeAttribute('value')
+          e.previousElementSibling.disabled = false
+          e.previousElementSibling.setAttribute(
+            'placeholder',
             'Recherche un appareil'
-          e.previousElementSibling.classList.add('my-btn--light')
-          e.previousElementSibling
-            .querySelector('span')
-            .setAttribute('contenteditable', 'true')
+          )
         }
         if (type === 'Ustensiles') {
-          e.previousElementSibling.querySelector('span').textContent =
+          e.previousElementSibling.removeAttribute('value')
+          e.previousElementSibling.disabled = false
+          e.previousElementSibling.setAttribute(
+            'placeholder',
             'Recherche un ustensile'
-          e.previousElementSibling.classList.add('my-btn--light')
-          e.previousElementSibling
-            .querySelector('span')
-            .setAttribute('contenteditable', 'true')
+          )
         }
       }
       if (dropdownOpen) {
         dropdownOpen.forEach((i) => {
-          const span2 = i.firstElementChild
-          const type2 = span2.textContent
+          const type2 = i.firstElementChild.getAttribute('placeholder')
           i.querySelector('.dropdown-menu').style.display = 'none'
-          i.classList.remove('flex-fill', 'show')
+          i.classList.remove(menuSize, 'show')
           if (type2 === 'Recherche un ingrédient') {
-            span2.querySelector('span').textContent = 'Ingrédients'
-            i.querySelector('button').classList.remove('my-btn--light')
-            i.querySelector('button')
-              .querySelector('span')
-              .setAttribute('contenteditable', 'false')
+            i.firstElementChild.removeAttribute('placeholder')
+            i.firstElementChild.disabled = true
+            i.firstElementChild.setAttribute('value', 'Ingrédients')
           }
           if (type2 === 'Recherche un appareil') {
-            span2.querySelector('span').textContent = 'Appareil'
-            i.querySelector('button').classList.remove('my-btn--light')
-            i.querySelector('button')
-              .querySelector('span')
-              .setAttribute('contenteditable', 'false')
+            i.firstElementChild.removeAttribute('placeholder')
+            i.firstElementChild.disabled = true
+            i.firstElementChild.setAttribute('value', 'Appareil')
           }
           if (type2 === 'Recherche un ustensile') {
-            span2.querySelector('span').textContent = 'Ustensiles'
-            i.querySelector('button').classList.remove('my-btn--light')
-            i.querySelector('button')
-              .querySelector('span')
-              .setAttribute('contenteditable', 'false')
+            i.firstElementChild.removeAttribute('placeholder')
+            i.firstElementChild.disabled = true
+            i.firstElementChild.setAttribute('value', 'Ustensiles')
           }
         })
       }

@@ -9977,8 +9977,8 @@ h3 {
 }
 
 .my-btn {
-  min-width: 150px;
-  min-height: 69px;
+  width: 170px;
+  height: 69px;
   font-family: "lato", sans-serif;
   font-style: normal;
   font-weight: bold;
@@ -10008,12 +10008,13 @@ h3 {
   line-height: 1.0625rem;
   margin-right: 8px;
 }
-.my-btn input {
-  display: none;
-}
 .my-btn span {
   display: block;
   width: 100%;
+}
+.my-btn::placeholder {
+  color: white;
+  opacity: 0.5;
 }
 
 .btn-primary:hover,
@@ -10046,6 +10047,10 @@ h3 {
 
 [contenteditable] {
   outline: 0px solid transparent;
+}
+
+input[type=text]:disabled {
+  opacity: 1;
 }
 
 .my-dropdown-toggle::after {

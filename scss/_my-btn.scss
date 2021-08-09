@@ -1,6 +1,6 @@
 .my-btn {
-  min-width: 150px;
-  min-height: 69px;
+  width: 170px;
+  height: 69px;
   font-family: 'lato', sans-serif;
   font-style: normal;
   font-weight: bold;
@@ -35,13 +35,14 @@
     }
   }
 
-  input {
-    display: none;
-  }
-
   span {
     display: block;
     width: 100%;
+  }
+
+  &::placeholder {
+    color: white;
+    opacity: 0.5;
   }
 }
 
@@ -77,4 +78,8 @@
 
 [contenteditable] {
   outline: 0px solid transparent;
+}
+
+input[type='text']:disabled {
+  opacity: 1;
 }
