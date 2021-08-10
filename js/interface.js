@@ -1,5 +1,64 @@
 const dropdown = document.querySelectorAll('#dropdownMenuButton')
 
+/*
+ * First search implementation - the simple
+ */
+const mainSearch = document.querySelector('#search')
+const recipesList = []
+
+/* function search(w) {
+  const ws = `${w}`.toLowerCase()
+  recipes.forEach((e) => {
+    if (e.name.toLowerCase().includes(ws)) {
+      return true
+    }
+    if (e.description.toLowerCase().includes(ws)) {
+      return true
+    }
+    e.ingredients.forEach((i) => {
+      if (i.ingredient.toLowerCase().includes(ws)) {
+        return true
+      }
+    })
+  })
+  return false
+} */
+
+function search(recipe, word) {
+  return recipe.filter(function (e) {
+    if (e.name.toLowerCase().includes(word.toLowerCase())) {
+      return true
+    }
+
+    for (const el of e.ingredients) {
+      if (el.ingredient.toLowerCase().includes(word.toLowerCase())) {
+        return true
+      }
+    }
+
+    /* e.ingredients.forEach((i) => {
+      if (i.ingredient.toLowerCase().includes(word.toLowerCase())) {
+        return true
+      }
+    }) */
+
+    if (e.description.toLowerCase().includes(word.toLowerCase())) {
+      return true
+    }
+    return false
+  })
+}
+
+let finish
+
+mainSearch.addEventListener('input', () => {
+  if (mainSearch.value.length > 2) {
+    finish = search(recipes, mainSearch.value)
+    console.log(finish)
+  }
+})
+
+// interaction on page
 const nbIngredients = 3
 let menuSize = 'w-75'
 
@@ -169,7 +228,7 @@ listTags.addEventListener('click', (e) => {
   }
 })
 
-// function search1
+/* function search1
 let c
 
 function myFilter(ingr) {
@@ -189,6 +248,4 @@ mainSearch.addEventListener('input', () => {
       }
     })
   }
-})
-
-// test champ advance search
+}) */
