@@ -1,46 +1,26 @@
 const dropdown = document.querySelectorAll('#dropdownMenuButton')
-
+let tab = []
 /*
  * First search implementation - the simple
  */
 const mainSearch = document.querySelector('#search')
 const recipesList = []
 
-/* function search(w) {
-  const ws = `${w}`.toLowerCase()
-  recipes.forEach((e) => {
-    if (e.name.toLowerCase().includes(ws)) {
-      return true
-    }
-    if (e.description.toLowerCase().includes(ws)) {
-      return true
-    }
-    e.ingredients.forEach((i) => {
-      if (i.ingredient.toLowerCase().includes(ws)) {
-        return true
-      }
-    })
-  })
-  return false
-} */
-
 function search(recipe, word) {
+  if (word.endsWith(' ')) {
+    word = word.trimEnd()
+  }
   return recipe.filter(function (e) {
     if (e.name.toLowerCase().includes(word.toLowerCase())) {
       return true
     }
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const el of e.ingredients) {
       if (el.ingredient.toLowerCase().includes(word.toLowerCase())) {
         return true
       }
     }
-
-    /* e.ingredients.forEach((i) => {
-      if (i.ingredient.toLowerCase().includes(word.toLowerCase())) {
-        return true
-      }
-    }) */
 
     if (e.description.toLowerCase().includes(word.toLowerCase())) {
       return true
@@ -49,12 +29,23 @@ function search(recipe, word) {
   })
 }
 
-let finish
+let declencheur = false
 
 mainSearch.addEventListener('input', () => {
   if (mainSearch.value.length > 2) {
-    finish = search(recipes, mainSearch.value)
-    console.log(finish)
+    setTimeout(() => {
+      generateList(search(recipes, mainSearch.value))
+    }, 250)
+    if (declencheur === false) {
+      declencheur = true
+    }
+  } else if (mainSearch.value.length === 2 && declencheur === true) {
+    setTimeout(() => {
+      generateList(recipes)
+    }, 250)
+    if (declencheur === true) {
+      declencheur = false
+    }
   }
 })
 
@@ -153,23 +144,37 @@ const allIngredients = []
 const allAppliances = []
 const allUstensils = []
 
-recipes.forEach((e) => {
-  const recipe = new Recipe(e)
-  document.querySelector('#test').innerHTML += recipe.card()
-  e.ingredients.forEach((i) => {
-    if (!allIngredients.includes(i.ingredient)) {
-      allIngredients.push(i.ingredient)
+function generateList(list) {
+  document.querySelector('#ingredients').innerHTML = ''
+  document.querySelector('#ustensils').innerHTML = ''
+  document.querySelector('#appliances').innerHTML = ''
+  document.querySelector('#test').innerHTML = ''
+  allIngredients.length = 0
+  allAppliances.length = 0
+  allUstensils.length = 0
+  list.forEach((e) => {
+    const recipe = new Recipe(e)
+    document.querySelector('#test').innerHTML += recipe.card()
+    e.ingredients.forEach((i) => {
+      if (!allIngredients.includes(i.ingredient)) {
+        allIngredients.push(i.ingredient)
+      }
+    })
+    e.ustensils.forEach((u) => {
+      if (!allUstensils.includes(u)) {
+        allUstensils.push(u)
+      }
+    })
+    if (!allAppliances.includes(e.appliance)) {
+      allAppliances.push(e.appliance)
     }
   })
-  e.ustensils.forEach((u) => {
-    if (!allUstensils.includes(u)) {
-      allUstensils.push(u)
-    }
-  })
-  if (!allAppliances.includes(e.appliance)) {
-    allAppliances.push(e.appliance)
-  }
-})
+  document.querySelector('#ingredients').innerHTML = createList(allIngredients)
+  document.querySelector('#ustensils').innerHTML = createList(allUstensils)
+  document.querySelector('#appliances').innerHTML = createList(allAppliances)
+}
+
+generateList(recipes)
 
 // create list ul of ingredient
 
@@ -192,15 +197,54 @@ function createList(list) {
   return result
 }
 
-document.querySelector('#ingredients').innerHTML = createList(allIngredients)
-document.querySelector('#appliances').innerHTML = createList(allUstensils)
-document.querySelector('#ustensils').innerHTML = createList(allUstensils)
-
 // Select filter tags
-const items = document.querySelectorAll('.list-group-item')
+const itemsIngredients = document.querySelector('#ingredients')
 
-items.forEach((i) =>
+function searchTag(type, tags) {
+  const nb = tags.length
+
+  if (type === 'ingredients') {
+    return recipes.filter((el) => {
+      let nbFind = 0
+      el.ingredients.forEach((i) => {
+        if (tags.includes(i.ingredient)) {
+          nbFind += 1
+        }
+      })
+      if (nb === nbFind) {
+        return true
+      }
+    })
+  }
+}
+
+itemsIngredients.addEventListener('click', (i) => {
+  if (i.target) {
+    if (i.target.nodeName === 'SPAN' && i.target.textContent) {
+      tab.push(i.target.textContent)
+      console.log(tab)
+      generateList(searchTag('ingredients', tab))
+      document.querySelector('#forTags').innerHTML += `
+    <a class="btn btn-primary my-btn--tag text-center">
+      <span class="text-nowrap">${i.target.textContent}</span>
+      <svg class="flex-shrink-0" width="20" height="20" viewBox="0 0 20 20" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+            fill="white" />
+      </svg>
+    </a>
+    `
+    }
+  }
+})
+
+/* items.forEach((i) =>
   i.addEventListener('click', () => {
+    tab.push(i.innerText)
+    console.log(i.innerText)
+    console.log(tab)
+    generateList(searchTag('ingredients', tab))
     document.querySelector('#forTags').innerHTML += `
   <a class="btn btn-primary my-btn--tag text-center">
     <span class="text-nowrap">${i.innerText}</span>
@@ -213,39 +257,26 @@ items.forEach((i) =>
   </a>
   `
   })
-)
+) */
 
 // Close filters tags
 const listTags = document.querySelector('#forTags')
 
 listTags.addEventListener('click', (e) => {
-  if (e.target) {
-    if (e.target.nodeName === 'svg') {
+  e.stopPropagation()
+  if (e.target.nodeName === 'path') {
+    tab = tab.filter(function (i) {
+      return (
+        i !== e.target.parentNode.parentNode.querySelector('span').textContent
+      )
+    })
+    generateList(searchTag('ingredients', tab))
+    e.target.parentNode.parentNode.remove()
+
+    /* if (e.target.nodeName === 'svg') {
       e.target.parentNode.remove()
     } else if (e.target.nodeName === 'path') {
       e.target.parentNode.parentNode.remove()
-    }
+    } */
   }
 })
-
-/* function search1
-let c
-
-function myFilter(ingr) {
-  if (ingr.toLowerCase().includes(c.toLowerCase())) {
-    return true
-  }
-  return false
-}
-
-const mainSearch = document.querySelector('#search')
-
-mainSearch.addEventListener('input', () => {
-  if (mainSearch.value.length > 2) {
-    allIngredients.forEach((e) => {
-      if (e.includes(mainSearch.value)) {
-        console.log('ouiiiiiiiiii')
-      }
-    })
-  }
-}) */
