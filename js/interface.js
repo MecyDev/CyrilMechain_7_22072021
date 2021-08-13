@@ -1,8 +1,12 @@
-const dropdown = document.querySelectorAll('#dropdownMenuButton')
-const tab = [[], [], []]
 /*
  * First search implementation - the simple
  */
+
+const dropdown = document.querySelectorAll('#dropdownMenuButton')
+const tab = [[], [], []]
+let recipesCopy = []
+let declencheur = false
+let switchRecipes
 const mainSearch = document.querySelector('#search')
 const recipesList = []
 
@@ -29,12 +33,17 @@ function search(recipe, word) {
   })
 }
 
-let declencheur = false
-
 mainSearch.addEventListener('input', () => {
   if (mainSearch.value.length > 2) {
+    if (recipesCopy.length === 0) {
+      switchRecipes = recipes
+    } else {
+      switchRecipes = recipesCopy
+    }
     setTimeout(() => {
-      generateList(search(recipes, mainSearch.value))
+      recipesCopy = search(switchRecipes, mainSearch.value)
+      console.log(recipesCopy)
+      generateList(recipesCopy)
     }, 250)
     if (declencheur === false) {
       declencheur = true
@@ -42,6 +51,7 @@ mainSearch.addEventListener('input', () => {
   } else if (mainSearch.value.length === 2 && declencheur === true) {
     setTimeout(() => {
       generateList(recipes)
+      recipesCopy.length = 0
     }, 250)
     if (declencheur === true) {
       declencheur = false
@@ -206,7 +216,13 @@ function searchTag(tags) {
   const nbu = tags[2].length
   const nbt = nbi + nba + nbu
 
-  return recipes.filter((el) => {
+  if (recipesCopy.length === 0) {
+    switchRecipes = recipes
+  } else {
+    switchRecipes = recipesCopy
+  }
+
+  return switchRecipes.filter((el) => {
     let nbFind = 0
     if (nbi > 0) {
       el.ingredients.forEach((i) => {
@@ -302,40 +318,40 @@ items.addEventListener('input', (i) => {
       document.querySelector('#ustensils').innerHTML = createList(allUstensils)
     }, 250)
   }
+})
 
-  // Close filters tags
-  const listTags = document.querySelector('#forTags')
+// Close filters tags
+const listTags = document.querySelector('#forTags')
 
-  listTags.addEventListener('click', (e) => {
-    e.stopPropagation()
-    let parent
-    if (e.target.nodeName === 'svg') {
-      parent = e.target.parentElement.parentElement
-    } else if (e.target.nodeName === 'path') {
-      parent = e.target.parentElement.parentElement.parentElement
+listTags.addEventListener('click', (e) => {
+  e.stopPropagation()
+  let parent
+  if (e.target.nodeName === 'svg') {
+    parent = e.target.parentElement.parentElement
+  } else if (e.target.nodeName === 'path') {
+    parent = e.target.parentElement.parentElement.parentElement
+  }
+
+  if (parent !== undefined) {
+    let index
+
+    if (parent.getAttribute('type') === 'ingredients') {
+      index = 0
+    }
+    if (parent.getAttribute('type') === 'appliances') {
+      index = 1
+    }
+    if (parent.getAttribute('type') === 'ustensils') {
+      index = 2
+    }
+    const tabIndex = tab[index].indexOf(
+      parent.querySelector('span').textContent.toLowerCase()
+    )
+    if (tabIndex !== -1) {
+      tab[index].splice(tabIndex, 1)
     }
 
-    if (parent !== undefined) {
-      let index
-
-      if (parent.getAttribute('type') === 'ingredients') {
-        index = 0
-      }
-      if (parent.getAttribute('type') === 'appliances') {
-        index = 1
-      }
-      if (parent.getAttribute('type') === 'ustensils') {
-        index = 2
-      }
-      const tabIndex = tab[index].indexOf(
-        parent.querySelector('span').textContent.toLowerCase()
-      )
-      if (tabIndex !== -1) {
-        tab[index].splice(tabIndex, 1)
-      }
-
-      generateList(searchTag(tab))
-      parent.remove()
-    }
-  })
+    generateList(searchTag(tab))
+    parent.remove()
+  }
 })
