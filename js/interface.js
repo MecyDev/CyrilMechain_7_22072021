@@ -7,8 +7,8 @@ const tab = [[], [], []]
 let recipesCopy = []
 let declencheur = false
 let switchRecipes
+let saveSearchTerm = ''
 const mainSearch = document.querySelector('#search')
-const recipesList = []
 
 function search(recipe, word) {
   if (word.endsWith(' ')) {
@@ -35,24 +35,27 @@ function search(recipe, word) {
 
 mainSearch.addEventListener('input', () => {
   if (mainSearch.value.length > 2) {
+    saveSearchTerm = mainSearch.value
     if (recipesCopy.length === 0) {
       switchRecipes = recipes
     } else {
       switchRecipes = recipesCopy
     }
-    setTimeout(() => {
-      recipesCopy = search(switchRecipes, mainSearch.value)
-      console.log(recipesCopy)
-      generateList(recipesCopy)
-    }, 250)
+
+    recipesCopy = search(switchRecipes, mainSearch.value)
+    generateList(recipesCopy)
+
     if (declencheur === false) {
       declencheur = true
     }
   } else if (mainSearch.value.length === 2 && declencheur === true) {
-    setTimeout(() => {
+    saveSearchTerm = ''
+    recipesCopy.length = 0
+    if (tab[0].length === 0 && tab[1].length === 0 && tab[2].length === 0) {
       generateList(recipes)
-      recipesCopy.length = 0
-    }, 250)
+    } else {
+      generateList(searchTag(tab))
+    }
     if (declencheur === true) {
       declencheur = false
     }
@@ -184,8 +187,6 @@ function generateList(list) {
   document.querySelector('#appliances').innerHTML = createList(allAppliances)
 }
 
-generateList(recipes)
-
 // create list ul of ingredient
 
 function createList(list) {
@@ -222,7 +223,7 @@ function searchTag(tags) {
     switchRecipes = recipesCopy
   }
 
-  return switchRecipes.filter((el) => {
+  recipesCopy = switchRecipes.filter((el) => {
     let nbFind = 0
     if (nbi > 0) {
       el.ingredients.forEach((i) => {
@@ -248,6 +249,7 @@ function searchTag(tags) {
       return true
     }
   })
+  return recipesCopy
 }
 
 items.addEventListener('click', (i) => {
@@ -351,7 +353,25 @@ listTags.addEventListener('click', (e) => {
       tab[index].splice(tabIndex, 1)
     }
 
-    generateList(searchTag(tab))
+    if (saveSearchTerm !== '') {
+      recipesCopy = search(recipes, saveSearchTerm)
+    }
+
+    if (
+      tab[0].length === 0 &&
+      tab[1].length === 0 &&
+      tab[2].length === 0 &&
+      saveSearchTerm === ''
+    ) {
+      generateList(recipes)
+    } else {
+      generateList(searchTag(tab))
+    }
+
     parent.remove()
   }
+})
+
+window.addEventListener('load', () => {
+  generateList(recipes)
 })
