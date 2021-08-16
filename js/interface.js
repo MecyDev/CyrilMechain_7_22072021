@@ -197,7 +197,7 @@ function createList(list) {
   for (let i = 0; i < list.length; i += 3) {
     let t = `<ul class="list-group list-group-horizontal">`
     for (j; j <= pointer; j += 1) {
-      if (list[j] === undefined) {
+      if (typeof list[j] === 'undefined') {
         list[j] = ''
       }
       t += `<li class="list-group-item w-100 border-0 bg-transparent"><a href="#" class="dropdown-item" title="${list[j]}"><span class="d-inline-block text-truncate" style="width: 10rem;">${list[j]}</span></a></li>`
@@ -369,6 +369,7 @@ listTags.addEventListener('click', (e) => {
     ) {
       generateList(recipes)
     } else {
+      recipesCopy.length = 0
       generateList(searchTag(tab))
     }
 
