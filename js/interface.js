@@ -184,8 +184,8 @@ function generateList(list) {
     }
   })
   document.querySelector('#ingredients').innerHTML = createList(allIngredients)
-  document.querySelector('#ustensils').innerHTML = createList(allUstensils)
   document.querySelector('#appliances').innerHTML = createList(allAppliances)
+  document.querySelector('#ustensils').innerHTML = createList(allUstensils)
 }
 
 // create list ul of ingredient
@@ -312,17 +312,15 @@ items.addEventListener('input', (i) => {
       if (el.toLowerCase().includes(filter)) {
         return true
       }
+      return false
     })
 
     document.querySelector(`#${selector}`).innerHTML = createList(targetList)
   } else if (i.target.value.length === 2) {
-    setTimeout(() => {
-      document.querySelector('#ingredients').innerHTML =
-        createList(allIngredients)
-      document.querySelector('#appliances').innerHTML =
-        createList(allAppliances)
-      document.querySelector('#ustensils').innerHTML = createList(allUstensils)
-    }, 250)
+    document.querySelector('#ingredients').innerHTML =
+      createList(allIngredients)
+    document.querySelector('#appliances').innerHTML = createList(allAppliances)
+    document.querySelector('#ustensils').innerHTML = createList(allUstensils)
   }
 })
 
@@ -367,6 +365,7 @@ listTags.addEventListener('click', (e) => {
       tab[2].length === 0 &&
       saveSearchTerm === ''
     ) {
+      recipesCopy.length = 0
       generateList(recipes)
     } else {
       recipesCopy.length = 0
