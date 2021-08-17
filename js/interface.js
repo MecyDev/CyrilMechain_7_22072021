@@ -63,15 +63,8 @@ mainSearch.addEventListener('input', () => {
 })
 
 // interaction on page
-const nbIngredients = 3
 
-let menuSize = 'w-75'
-
-if (nbIngredients === 2) {
-  menuSize = 'w-50'
-} else if (nbIngredients < 2) {
-  menuSize = 'w-0'
-}
+const menuSize = 'w-75'
 
 dropdown.forEach(
   (e) =>
@@ -87,16 +80,19 @@ dropdown.forEach(
         if (type === 'Recherche un ingrédient') {
           e.previousElementSibling.removeAttribute('placeholder')
           e.previousElementSibling.disabled = true
+          e.previousElementSibling.value = 'Ingrédients'
           e.previousElementSibling.setAttribute('value', 'Ingrédients')
         }
         if (type === 'Recherche un appareil') {
           e.previousElementSibling.removeAttribute('placeholder')
           e.previousElementSibling.disabled = true
+          e.previousElementSibling.value = 'Appareil'
           e.previousElementSibling.setAttribute('value', 'Appareil')
         }
         if (type === 'Recherche un ustensile') {
           e.previousElementSibling.removeAttribute('placeholder')
           e.previousElementSibling.disabled = true
+          e.previousElementSibling.value = 'Ustensiles'
           e.previousElementSibling.setAttribute('value', 'Ustensiles')
         }
       } else {
@@ -104,6 +100,7 @@ dropdown.forEach(
         e.nextElementSibling.style.display = 'block'
         if (type === 'Ingrédients') {
           e.previousElementSibling.removeAttribute('value')
+          e.previousElementSibling.value = ''
           e.previousElementSibling.disabled = false
           e.previousElementSibling.setAttribute(
             'placeholder',
@@ -112,6 +109,7 @@ dropdown.forEach(
         }
         if (type === 'Appareil') {
           e.previousElementSibling.removeAttribute('value')
+          e.previousElementSibling.value = ''
           e.previousElementSibling.disabled = false
           e.previousElementSibling.setAttribute(
             'placeholder',
@@ -120,6 +118,7 @@ dropdown.forEach(
         }
         if (type === 'Ustensiles') {
           e.previousElementSibling.removeAttribute('value')
+          e.previousElementSibling.value = ''
           e.previousElementSibling.disabled = false
           e.previousElementSibling.setAttribute(
             'placeholder',
@@ -131,7 +130,7 @@ dropdown.forEach(
         dropdownOpen.forEach((i) => {
           const type2 = i.firstElementChild.getAttribute('placeholder')
           i.querySelector('.dropdown-menu').style.display = 'none'
-          i.classList.remove(menuSize, 'show')
+          i.classList.remove('show')
           if (type2 === 'Recherche un ingrédient') {
             i.firstElementChild.removeAttribute('placeholder')
             i.firstElementChild.disabled = true
@@ -174,14 +173,14 @@ function generateList(list) {
         allIngredients.push(i.ingredient)
       }
     })
+    if (!allAppliances.includes(e.appliance)) {
+      allAppliances.push(e.appliance)
+    }
     e.ustensils.forEach((u) => {
       if (!allUstensils.includes(u)) {
         allUstensils.push(u)
       }
     })
-    if (!allAppliances.includes(e.appliance)) {
-      allAppliances.push(e.appliance)
-    }
   })
   document.querySelector('#ingredients').innerHTML = createList(allIngredients)
   document.querySelector('#appliances').innerHTML = createList(allAppliances)
@@ -197,10 +196,11 @@ function createList(list) {
   for (let i = 0; i < list.length; i += 3) {
     let t = `<ul class="list-group list-group-horizontal">`
     for (j; j <= pointer; j += 1) {
+      let item = list[j]
       if (typeof list[j] === 'undefined') {
-        list[j] = ''
+        item = ''
       }
-      t += `<li class="list-group-item w-100 border-0 bg-transparent"><a href="#" class="dropdown-item" title="${list[j]}"><span class="d-inline-block text-truncate" style="width: 10rem;">${list[j]}</span></a></li>`
+      t += `<li class="list-group-item w-100 border-0 bg-transparent"><a href="#" class="dropdown-item" title="${item}"><span class="d-inline-block text-truncate" style="width: 10rem;">${item}</span></a></li>`
     }
     t += `</ul>`
     pointer += 3
