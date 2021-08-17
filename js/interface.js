@@ -36,10 +36,30 @@ function search(recipe, word) {
 mainSearch.addEventListener('input', () => {
   if (mainSearch.value.length > 2) {
     saveSearchTerm = mainSearch.value
-    if (recipesCopy.length === 0) {
+    if (
+      recipesCopy.length === 0 &&
+      tab[0].length === 0 &&
+      tab[1].length === 0 &&
+      tab[2].length === 0
+    ) {
       switchRecipes = recipes
-    } else {
+    }
+
+    if (
+      (recipesCopy.length > 0 && tab[0].length > 0) ||
+      tab[1].length > 0 ||
+      tab[2].length > 0
+    ) {
       switchRecipes = recipesCopy
+    }
+
+    if (
+      recipesCopy.length > 0 &&
+      tab[0].length === 0 &&
+      tab[1].length === 0 &&
+      tab[2].length === 0
+    ) {
+      switchRecipes = recipes
     }
 
     recipesCopy = search(switchRecipes, mainSearch.value)
@@ -69,84 +89,86 @@ const menuSize = 'w-75'
 dropdown.forEach(
   (e) =>
     e.addEventListener('click', () => {
-      const dropdownOpen = document.querySelectorAll('.show')
-      let type = e.previousElementSibling.getAttribute('value')
-      if (type === null) {
-        type = e.previousElementSibling.getAttribute('placeholder')
-      }
-      if (e.parentElement.classList.contains('show')) {
-        e.parentElement.classList.remove(menuSize, 'show')
-        e.nextElementSibling.style.display = 'none'
-        if (type === 'Recherche un ingrédient') {
-          e.previousElementSibling.removeAttribute('placeholder')
-          e.previousElementSibling.disabled = true
-          e.previousElementSibling.value = 'Ingrédients'
-          e.previousElementSibling.setAttribute('value', 'Ingrédients')
+      if (allIngredients.length > 0) {
+        const dropdownOpen = document.querySelectorAll('.show')
+        let type = e.previousElementSibling.getAttribute('value')
+        if (type === null) {
+          type = e.previousElementSibling.getAttribute('placeholder')
         }
-        if (type === 'Recherche un appareil') {
-          e.previousElementSibling.removeAttribute('placeholder')
-          e.previousElementSibling.disabled = true
-          e.previousElementSibling.value = 'Appareil'
-          e.previousElementSibling.setAttribute('value', 'Appareil')
-        }
-        if (type === 'Recherche un ustensile') {
-          e.previousElementSibling.removeAttribute('placeholder')
-          e.previousElementSibling.disabled = true
-          e.previousElementSibling.value = 'Ustensiles'
-          e.previousElementSibling.setAttribute('value', 'Ustensiles')
-        }
-      } else {
-        e.parentElement.classList.add(menuSize, 'show')
-        e.nextElementSibling.style.display = 'block'
-        if (type === 'Ingrédients') {
-          e.previousElementSibling.removeAttribute('value')
-          e.previousElementSibling.value = ''
-          e.previousElementSibling.disabled = false
-          e.previousElementSibling.setAttribute(
-            'placeholder',
-            'Recherche un ingrédient'
-          )
-        }
-        if (type === 'Appareil') {
-          e.previousElementSibling.removeAttribute('value')
-          e.previousElementSibling.value = ''
-          e.previousElementSibling.disabled = false
-          e.previousElementSibling.setAttribute(
-            'placeholder',
-            'Recherche un appareil'
-          )
-        }
-        if (type === 'Ustensiles') {
-          e.previousElementSibling.removeAttribute('value')
-          e.previousElementSibling.value = ''
-          e.previousElementSibling.disabled = false
-          e.previousElementSibling.setAttribute(
-            'placeholder',
-            'Recherche un ustensile'
-          )
-        }
-      }
-      if (dropdownOpen) {
-        dropdownOpen.forEach((i) => {
-          const type2 = i.firstElementChild.getAttribute('placeholder')
-          i.querySelector('.dropdown-menu').style.display = 'none'
-          i.classList.remove('show')
-          if (type2 === 'Recherche un ingrédient') {
-            i.firstElementChild.removeAttribute('placeholder')
-            i.firstElementChild.disabled = true
-            i.firstElementChild.setAttribute('value', 'Ingrédients')
+        if (e.parentElement.classList.contains('show')) {
+          e.parentElement.classList.remove(menuSize, 'show')
+          e.nextElementSibling.style.display = 'none'
+          if (type === 'Recherche un ingrédient') {
+            e.previousElementSibling.removeAttribute('placeholder')
+            e.previousElementSibling.disabled = true
+            e.previousElementSibling.value = 'Ingrédients'
+            e.previousElementSibling.setAttribute('value', 'Ingrédients')
           }
-          if (type2 === 'Recherche un appareil') {
-            i.firstElementChild.removeAttribute('placeholder')
-            i.firstElementChild.disabled = true
-            i.firstElementChild.setAttribute('value', 'Appareil')
+          if (type === 'Recherche un appareil') {
+            e.previousElementSibling.removeAttribute('placeholder')
+            e.previousElementSibling.disabled = true
+            e.previousElementSibling.value = 'Appareil'
+            e.previousElementSibling.setAttribute('value', 'Appareil')
           }
-          if (type2 === 'Recherche un ustensile') {
-            i.firstElementChild.removeAttribute('placeholder')
-            i.firstElementChild.disabled = true
-            i.firstElementChild.setAttribute('value', 'Ustensiles')
+          if (type === 'Recherche un ustensile') {
+            e.previousElementSibling.removeAttribute('placeholder')
+            e.previousElementSibling.disabled = true
+            e.previousElementSibling.value = 'Ustensiles'
+            e.previousElementSibling.setAttribute('value', 'Ustensiles')
           }
-        })
+        } else {
+          e.parentElement.classList.add(menuSize, 'show')
+          e.nextElementSibling.style.display = 'block'
+          if (type === 'Ingrédients') {
+            e.previousElementSibling.removeAttribute('value')
+            e.previousElementSibling.value = ''
+            e.previousElementSibling.disabled = false
+            e.previousElementSibling.setAttribute(
+              'placeholder',
+              'Recherche un ingrédient'
+            )
+          }
+          if (type === 'Appareil') {
+            e.previousElementSibling.removeAttribute('value')
+            e.previousElementSibling.value = ''
+            e.previousElementSibling.disabled = false
+            e.previousElementSibling.setAttribute(
+              'placeholder',
+              'Recherche un appareil'
+            )
+          }
+          if (type === 'Ustensiles') {
+            e.previousElementSibling.removeAttribute('value')
+            e.previousElementSibling.value = ''
+            e.previousElementSibling.disabled = false
+            e.previousElementSibling.setAttribute(
+              'placeholder',
+              'Recherche un ustensile'
+            )
+          }
+        }
+        if (dropdownOpen) {
+          dropdownOpen.forEach((i) => {
+            const type2 = i.firstElementChild.getAttribute('placeholder')
+            i.querySelector('.dropdown-menu').style.display = 'none'
+            i.classList.remove('show')
+            if (type2 === 'Recherche un ingrédient') {
+              i.firstElementChild.removeAttribute('placeholder')
+              i.firstElementChild.disabled = true
+              i.firstElementChild.setAttribute('value', 'Ingrédients')
+            }
+            if (type2 === 'Recherche un appareil') {
+              i.firstElementChild.removeAttribute('placeholder')
+              i.firstElementChild.disabled = true
+              i.firstElementChild.setAttribute('value', 'Appareil')
+            }
+            if (type2 === 'Recherche un ustensile') {
+              i.firstElementChild.removeAttribute('placeholder')
+              i.firstElementChild.disabled = true
+              i.firstElementChild.setAttribute('value', 'Ustensiles')
+            }
+          })
+        }
       }
     }),
   false
@@ -161,30 +183,46 @@ function generateList(list) {
   document.querySelector('#ingredients').innerHTML = ''
   document.querySelector('#ustensils').innerHTML = ''
   document.querySelector('#appliances').innerHTML = ''
-  document.querySelector('#test').innerHTML = ''
+  document
+    .querySelector('#showRecipes')
+    .classList.add('row-cols-1', 'row-cols-md-3')
+  document.querySelector('#showRecipes').innerHTML = ''
   allIngredients.length = 0
   allAppliances.length = 0
   allUstensils.length = 0
-  list.forEach((e) => {
-    const recipe = new Recipe(e)
-    document.querySelector('#test').innerHTML += recipe.card()
-    e.ingredients.forEach((i) => {
-      if (!allIngredients.includes(i.ingredient)) {
-        allIngredients.push(i.ingredient)
+
+  if (list.length > 0) {
+    list.forEach((e) => {
+      const recipe = new Recipe(e)
+      document.querySelector('#showRecipes').innerHTML += recipe.card()
+      e.ingredients.forEach((i) => {
+        if (!allIngredients.includes(i.ingredient)) {
+          allIngredients.push(i.ingredient)
+        }
+      })
+      if (!allAppliances.includes(e.appliance)) {
+        allAppliances.push(e.appliance)
       }
+      e.ustensils.forEach((u) => {
+        if (!allUstensils.includes(u)) {
+          allUstensils.push(u)
+        }
+      })
     })
-    if (!allAppliances.includes(e.appliance)) {
-      allAppliances.push(e.appliance)
-    }
-    e.ustensils.forEach((u) => {
-      if (!allUstensils.includes(u)) {
-        allUstensils.push(u)
-      }
-    })
-  })
-  document.querySelector('#ingredients').innerHTML = createList(allIngredients)
-  document.querySelector('#appliances').innerHTML = createList(allAppliances)
-  document.querySelector('#ustensils').innerHTML = createList(allUstensils)
+    document.querySelector('#ingredients').innerHTML =
+      createList(allIngredients)
+    document.querySelector('#appliances').innerHTML = createList(allAppliances)
+    document.querySelector('#ustensils').innerHTML = createList(allUstensils)
+  } else {
+    document
+      .querySelector('#showRecipes')
+      .classList.remove('row-cols-1', 'row-cols-md-3')
+
+    document.querySelector(
+      '#showRecipes'
+    ).innerHTML = `<div class="col">Aucune recette ne correspond à votre critère… vous pouvez
+    chercher « tarte aux pommes », « poisson », « coco » « lait » etc...</div>`
+  }
 }
 
 // create list ul of ingredient
@@ -355,11 +393,15 @@ listTags.addEventListener('click', (e) => {
       tab[index].splice(tabIndex, 1)
     }
 
-    if (saveSearchTerm !== '') {
-      recipesCopy = search(recipes, saveSearchTerm)
-    }
-
     if (
+      tab[0].length === 0 &&
+      tab[1].length === 0 &&
+      tab[2].length === 0 &&
+      saveSearchTerm !== ''
+    ) {
+      recipesCopy = search(recipes, saveSearchTerm)
+      generateList(recipesCopy)
+    } else if (
       tab[0].length === 0 &&
       tab[1].length === 0 &&
       tab[2].length === 0 &&
@@ -370,6 +412,7 @@ listTags.addEventListener('click', (e) => {
     } else {
       recipesCopy.length = 0
       generateList(searchTag(tab))
+      console(`qu'est ce que je fou ici !`)
     }
 
     parent.remove()
