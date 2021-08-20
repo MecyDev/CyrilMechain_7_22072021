@@ -10,7 +10,78 @@ let switchRecipes
 let saveSearchTerm = ''
 const mainSearch = document.querySelector('#search')
 
-function search(recipe, word) {
+function search(keyList, word) {
+  let find = -1
+  for (let i = 0; i < keyList.length; i += 1) {
+    if (keyList[i] === word) {
+      find = 1
+      break
+    }
+  }
+  return find
+}
+
+function listFilter(recipe, word) {
+  if (word.endsWith(' ')) {
+    word = word.trimEnd()
+  }
+
+  const recipesFilters = []
+
+  for (let i = 0; i < recipe.length; i += 1) {
+    let keyWordTab = []
+
+    const reg = /['!"#$%&\\'()*+,\-./:;<=>?@[\\\]^_`{|}~']/g
+
+    const descTab = recipe[i].description
+      .toLowerCase()
+      .replace(reg, ' ')
+      .split(' ')
+      .filter((e) => {
+        if (e.length > 2) {
+          return true
+        }
+        return false
+      })
+
+    const titleTab = recipe[i].name
+      .toLowerCase()
+      .replace(reg, ' ')
+      .split(' ')
+      .filter((e) => {
+        if (e.length > 2) {
+          return true
+        }
+        return false
+      })
+
+    const ingTab = recipe[i].ingredients
+      .map((el) => {
+        const il = el.ingredient
+          .toLowerCase()
+          .split(' ')
+          .filter((e) => {
+            if (e.length > 2) {
+              return true
+            }
+            return false
+          })
+        return il
+      })
+      .flat()
+
+    keyWordTab = keyWordTab.concat(titleTab, ingTab, descTab)
+    keyWordTab = Array.from(new Set(keyWordTab))
+
+    if (search(keyWordTab.sort(), word) > 0) {
+      recipesFilters.push(recipe[i])
+    }
+  }
+
+  return recipesFilters
+}
+
+/* function listFilter(recipe, word) {
   if (word.endsWith(' ')) {
     word = word.trimEnd()
   }
@@ -31,7 +102,7 @@ function search(recipe, word) {
     }
     return false
   })
-}
+} */
 
 mainSearch.addEventListener('input', () => {
   if (mainSearch.value.length > 2) {
@@ -62,7 +133,7 @@ mainSearch.addEventListener('input', () => {
       switchRecipes = recipes
     }
 
-    recipesCopy = search(switchRecipes, mainSearch.value)
+    recipesCopy = listFilter(switchRecipes, mainSearch.value)
     generateList(recipesCopy)
 
     if (declencheur === false) {
@@ -399,7 +470,7 @@ listTags.addEventListener('click', (e) => {
       tab[2].length === 0 &&
       saveSearchTerm !== ''
     ) {
-      recipesCopy = search(recipes, saveSearchTerm)
+      recipesCopy = listFilter(recipes, saveSearchTerm)
       generateList(recipesCopy)
     } else if (
       tab[0].length === 0 &&
