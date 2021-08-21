@@ -72,9 +72,11 @@ function listFilter(recipe, word) {
 
     keyWordTab = keyWordTab.concat(titleTab, ingTab, descTab)
     keyWordTab = Array.from(new Set(keyWordTab))
-
-    if (search(keyWordTab.sort(), word) > 0) {
-      recipesFilters.push(recipe[i])
+    console.log(keyWordTab)
+    for (let i = 0; i < keyWordTab.length; i += 1) {
+      if (keyWordTab[i] === word) {
+        recipesFilters.push(recipe[i])
+      }
     }
   }
 
