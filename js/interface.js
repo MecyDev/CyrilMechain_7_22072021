@@ -16,7 +16,7 @@ function listFilter(recipe, word) {
   let reg = ''
 
   word.forEach((w) => {
-    reg += `(?=.*\\b${w})`
+    reg += `(?=.*\\b${w.normalize('NFD').replace(/\p{Diacritic}/g, '')})`
   })
 
   const recipesFilter = []
@@ -27,7 +27,7 @@ function listFilter(recipe, word) {
       recipe[i].description
         .toLowerCase()
         .normalize('NFD')
-        .replace(/\p{Diacritic}/gu, '')
+        .replace(/\p{Diacritic}/g, '')
         .search(reg) !== -1
     ) {
       find = 1
@@ -36,7 +36,7 @@ function listFilter(recipe, word) {
       recipe[i].name
         .toLowerCase()
         .normalize('NFD')
-        .replace(/\p{Diacritic}/gu, '')
+        .replace(/\p{Diacritic}/g, '')
         .search(reg) !== -1
     ) {
       find = 1
@@ -47,7 +47,7 @@ function listFilter(recipe, word) {
         recipe[i].ingredients[j].ingredient
           .toLowerCase()
           .normalize('NFD')
-          .replace(/\p{Diacritic}/gu, '')
+          .replace(/\p{Diacritic}/g, '')
           .search(reg) !== -1
       ) {
         find = 1
