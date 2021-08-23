@@ -63,29 +63,6 @@ function listFilter(recipe, word) {
   return recipesCopy
 }
 
-/* function listFilter(recipe, word) {
-  if (word.endsWith(' ')) {
-    word = word.trimEnd()
-  }
-  return recipe.filter(function (e) {
-    if (e.name.toLowerCase().includes(word.toLowerCase())) {
-      return true
-    }
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const el of e.ingredients) {
-      if (el.ingredient.toLowerCase().includes(word.toLowerCase())) {
-        return true
-      }
-    }
-
-    if (e.description.toLowerCase().includes(word.toLowerCase())) {
-      return true
-    }
-    return false
-  })
-} */
-
 mainSearch.addEventListener('input', () => {
   if (mainSearch.value.length > 2) {
     saveSearchTerm = mainSearch.value
