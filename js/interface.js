@@ -10,79 +10,34 @@ let switchRecipes
 let saveSearchTerm = ''
 const mainSearch = document.querySelector('#search')
 
-function search(keyList, word) {
-  let find = -1
-  for (let i = 0; i < keyList.length; i += 1) {
-    if (keyList[i] === word) {
-      find = 1
-      break
-    }
-  }
-  return find
-}
-
 function listFilter(recipe, word) {
-  if (word.endsWith(' ')) {
-    word = word.trimEnd()
-  }
+  word = word.toLowerCase().split(' ')
 
-  const recipesFilters = []
+  let reg = ''
+
+  word.forEach((w) => {
+    reg += `(?=.*${w})`
+  })
+
+  const recipesFilter = []
 
   for (let i = 0; i < recipe.length; i += 1) {
-    let keyWordTab = []
-
-    const reg = /['!"#$%&\\'()*+,\-./:;<=>?@[\\\]^_`{|}~']/g
-
-    const descTab = recipe[i].description
-      .toLowerCase()
-      .replace(reg, ' ')
-      .split(' ')
-      .filter((e) => {
-        if (e.length > 2) {
-          return true
+    if (recipe[i].description.toLowerCase().search(reg) !== -1) {
+      recipesFilter.push(recipe[i])
+    } else if (recipe[i].name.toLowerCase().search(reg) !== -1) {
+      recipesFilter.push(recipe[i])
+    } else {
+      for (let j = 0; j < recipe[i].ingredients.length; j += 1) {
+        if (
+          recipe[i].ingredients[j].ingredient.toLowerCase().search(reg) !== -1
+        ) {
+          recipesFilter.push(recipe[i])
         }
-        return false
-      })
-
-    const titleTab = recipe[i].name
-      .toLowerCase()
-      .replace(reg, ' ')
-      .split(' ')
-      .filter((e) => {
-        if (e.length > 2) {
-          return true
-        }
-        return false
-      })
-
-    const ingTab = recipe[i].ingredients
-      .map((el) => {
-        const il = el.ingredient
-          .toLowerCase()
-          .split(' ')
-          .filter((e) => {
-            if (e.length > 2) {
-              return true
-            }
-            return false
-          })
-        return il
-      })
-      .flat()
-
-    keyWordTab = Array.from(
-      new Set(keyWordTab.concat(titleTab, ingTab, descTab))
-    ).sort()
-
-    for (let x = 0; x < keyWordTab.length; x += 1) {
-      if (keyWordTab[x] === word) {
-        recipesFilters.push(recipe[i])
-        break
       }
     }
   }
 
-  return recipesFilters
+  return recipesFilter
 }
 
 /* function listFilter(recipe, word) {
