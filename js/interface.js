@@ -11,7 +11,10 @@ let saveSearchTerm = ''
 const mainSearch = document.querySelector('#search')
 
 function listFilter(recipe, word) {
-  word = word.toLowerCase().split(' ')
+  word = word
+    .toLowerCase()
+    .split(' ')
+    .filter((el) => el.length > 2)
 
   let reg = ''
 
