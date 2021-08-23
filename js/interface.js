@@ -24,15 +24,15 @@ function listFilter(recipe, word) {
   for (let i = 0; i < recipe.length; i += 1) {
     if (recipe[i].description.toLowerCase().search(reg) !== -1) {
       recipesFilter.push(recipe[i])
-    } else if (recipe[i].name.toLowerCase().search(reg) !== -1) {
+    }
+    if (recipe[i].name.toLowerCase().search(reg) !== -1) {
       recipesFilter.push(recipe[i])
-    } else {
-      for (let j = 0; j < recipe[i].ingredients.length; j += 1) {
-        if (
-          recipe[i].ingredients[j].ingredient.toLowerCase().search(reg) !== -1
-        ) {
-          recipesFilter.push(recipe[i])
-        }
+    }
+    for (let j = 0; j < recipe[i].ingredients.length; j += 1) {
+      if (
+        recipe[i].ingredients[j].ingredient.toLowerCase().search(reg) !== -1
+      ) {
+        recipesFilter.push(recipe[i])
       }
     }
   }
