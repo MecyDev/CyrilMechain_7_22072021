@@ -16,28 +16,51 @@ function listFilter(recipe, word) {
   let reg = ''
 
   word.forEach((w) => {
-    reg += `(?=.*${w})`
+    reg += `(?=.*\\b${w})`
   })
 
   const recipesFilter = []
 
   for (let i = 0; i < recipe.length; i += 1) {
-    if (recipe[i].description.toLowerCase().search(reg) !== -1) {
-      recipesFilter.push(recipe[i])
+    let find = 0
+    if (
+      recipe[i].description
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
+        .search(reg) !== -1
+    ) {
+      find = 1
     }
-    if (recipe[i].name.toLowerCase().search(reg) !== -1) {
-      recipesFilter.push(recipe[i])
+    if (
+      recipe[i].name
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
+        .search(reg) !== -1
+    ) {
+      find = 1
     }
+
     for (let j = 0; j < recipe[i].ingredients.length; j += 1) {
       if (
-        recipe[i].ingredients[j].ingredient.toLowerCase().search(reg) !== -1
+        recipe[i].ingredients[j].ingredient
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/\p{Diacritic}/gu, '')
+          .search(reg) !== -1
       ) {
-        recipesFilter.push(recipe[i])
+        find = 1
       }
     }
+    if (find === 1) {
+      recipesFilter.push(recipe[i])
+    }
   }
-
-  return recipesFilter
+  if (recipesFilter.length > 0) {
+    return recipesFilter
+  }
+  return recipesCopy
 }
 
 /* function listFilter(recipe, word) {
