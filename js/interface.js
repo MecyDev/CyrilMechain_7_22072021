@@ -61,7 +61,10 @@ function listFilter(recipe, word) {
     }
   }
 
-  return recipesFilter
+  if (recipesFilter.length > 0) {
+    return recipesFilter
+  }
+  return recipesCopy
 }
 
 mainSearch.addEventListener('input', () => {
