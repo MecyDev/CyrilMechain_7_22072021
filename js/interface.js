@@ -2,7 +2,9 @@
  * First search implementation - the simple
  */
 
-const dropdown = document.querySelectorAll('#dropdownMenuButton')
+const dropdown = document.querySelectorAll(
+  '#dropdownMenuButton, #dropdownMenuButton2, #dropdownMenuButton3'
+)
 const tab = [[], [], []]
 let recipesCopy = []
 let declencheur = false
@@ -446,7 +448,6 @@ listTags.addEventListener('click', (e) => {
     } else {
       recipesCopy.length = 0
       generateList(searchTag(tab))
-      console(`qu'est ce que je fou ici !`)
     }
 
     parent.remove()
