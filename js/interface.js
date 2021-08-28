@@ -187,20 +187,23 @@ dropdown.forEach(
           dropdownOpen.forEach((i) => {
             const type2 = i.firstElementChild.getAttribute('placeholder')
             i.querySelector('.dropdown-menu').style.display = 'none'
-            i.classList.remove('show')
+            i.classList.remove(menuSize, 'show')
             if (type2 === 'Recherche un ingrédient') {
               i.firstElementChild.removeAttribute('placeholder')
               i.firstElementChild.disabled = true
+              i.firstElementChild.value = 'Ingrédients'
               i.firstElementChild.setAttribute('value', 'Ingrédients')
             }
             if (type2 === 'Recherche un appareil') {
               i.firstElementChild.removeAttribute('placeholder')
               i.firstElementChild.disabled = true
+              i.firstElementChild.value = 'Appareil'
               i.firstElementChild.setAttribute('value', 'Appareil')
             }
             if (type2 === 'Recherche un ustensile') {
               i.firstElementChild.removeAttribute('placeholder')
               i.firstElementChild.disabled = true
+              i.firstElementChild.value = 'Ustensiles'
               i.firstElementChild.setAttribute('value', 'Ustensiles')
             }
           })
