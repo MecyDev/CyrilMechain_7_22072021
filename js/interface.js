@@ -1,11 +1,23 @@
+// @ts-check
+
 /*
  * First search implementation - the simple
  */
 
+/**
+ * For select all dropdow buttons
+ * @type {NodeListOf}
+ */
 const dropdown = document.querySelectorAll(
   '#dropdownMenuButton, #dropdownMenuButton2, #dropdownMenuButton3'
 )
+
+/**
+ * Array contains 3 others arrays for listing tag Ingredients, Appliances and ustensils
+ * @type {Array.<Array.<string>>}
+ */
 const tab = [[], [], []]
+
 let recipesCopy = []
 let declencheur = false
 let switchRecipes
