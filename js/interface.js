@@ -75,73 +75,92 @@ const allAppliances = []
 const allUstensils = []
 
 /**
- * Filter the recipes according to the user's search.
- * @param {Array} recipe List of recipes
- * @param {string} word User entry
- * @returns {Array} The list filtered with user entry or, if not find, the origin list past in paramater
+ * Simple Binary search
+ * @param {Array} keyList
+ * @param {string} word
+ * @returns -1 if false
  */
-function listFilter(recipe, word) {
-  /**
-   * Transform word in an array of string words > 2
-   * @type {Array}
-   */
-  const arrayWord = word
-    .toLowerCase()
-    .split(' ')
-    .filter((el) => el.length > 2)
+function search(keyList, word) {
+  let start = 0
+  let end = keyList.length - 1
 
-  /** @type {string} */
-  let reg = ''
+  while (start <= end) {
+    const middle = Math.floor((start + end) / 2)
 
-  arrayWord.forEach((w) => {
-    reg += `(?=.*\\b${w.normalize('NFD').replace(/\p{Diacritic}/gu, '')})`
-  })
-
-  /**
-   * Array of recipes corresponding to the search.
-   * @type {Array}
-   */
-  const recipesFilter = []
-
-  for (let i = 0; i < recipe.length; i += 1) {
-    let find = 0
-    if (
-      recipe[i].description
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/\p{Diacritic}/gu, '')
-        .search(reg) !== -1
-    ) {
-      find = 1
+    if (keyList[middle] === word) {
+      return middle
     }
-    if (
-      recipe[i].name
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/\p{Diacritic}/gu, '')
-        .search(reg) !== -1
-    ) {
-      find = 1
-    }
-
-    for (let j = 0; j < recipe[i].ingredients.length; j += 1) {
-      if (
-        recipe[i].ingredients[j].ingredient
-          .toLowerCase()
-          .normalize('NFD')
-          .replace(/\p{Diacritic}/gu, '')
-          .search(reg) !== -1
-      ) {
-        find = 1
-      }
-    }
-    if (find === 1) {
-      recipesFilter.push(recipe[i])
+    if (keyList[middle] < word) {
+      start = middle + 1
+    } else {
+      end = middle - 1
     }
   }
 
-  if (recipesFilter.length > 0) {
-    return recipesFilter
+  return -1
+}
+
+/**
+ * Filter the recipes according to the user's search.
+ * @param {Array} recipe
+ * @param {string} word
+ * @returns {Array} Return the filtered recipes or, if not find, the origin recipes
+ */
+function listFilter(recipe, word) {
+  word = word.split(' ').filter((el) => el.length > 2)
+
+  const recipesFilters = []
+
+  for (let i = 0; i < recipe.length; i += 1) {
+    let keyWordTab = []
+    let find = 0
+
+    keyWordTab = keyWordTab
+      .concat(
+        recipe[i].description
+          .toLowerCase()
+          .replace(/['!"#$%&\\'()*+,\-./:;<=>?@[\\\]^_`{|}~']/g, '')
+          .normalize('NFD')
+          .replace(/\p{Diacritic}/gu, '')
+          .split(' '),
+        recipe[i].name
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/\p{Diacritic}/gu, '')
+          .split(' '),
+        recipe[i].ingredients
+          .map((el) => {
+            const il = el.ingredient
+              .toLowerCase()
+              .normalize('NFD')
+              .replace(/\p{Diacritic}/gu, '')
+              .split(' ')
+            return il
+          })
+          .flat()
+      )
+      .sort()
+
+    for (let w = 0; w < word.length; w += 1) {
+      if (
+        search(
+          keyWordTab,
+          word[w]
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/\p{Diacritic}/gu, '')
+        ) > -1
+      ) {
+        find += 1
+      }
+    }
+    if (find === word.length) {
+      recipesFilters.push(recipe[i])
+    }
+  }
+
+  if (recipesFilters.length > 0) {
+    return recipesFilters
   }
   return recipesCopy
 }
@@ -222,7 +241,7 @@ function generateList(list) {
     document.querySelector(
       '#showRecipes'
     ).innerHTML = `<div class="col">Aucune recette ne correspond à votre critère… vous pouvez
-    chercher « tarte aux pommes », « poisson », « coco » « lait » etc...</div>`
+      chercher « tarte aux pommes », « poisson », « coco » « lait » etc...</div>`
   }
 }
 
@@ -458,18 +477,18 @@ items.addEventListener('click', (i) => {
 
       generateList(searchTag(tab))
       document.querySelector('#forTags').innerHTML += `
-    <a class="btn ${tagsType} my-btn--tag text-center my-btn--${greatParentId}" type="${greatParentId}">
-      <span class="text-nowrap">${i.target.textContent}</span>
-      <span id="tag" class="flex-shrink-0">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path
-              d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
-              fill="white" />
-        </svg>
-      </span>
-    </a>
-    `
+      <a class="btn ${tagsType} my-btn--tag text-center my-btn--${greatParentId}" type="${greatParentId}">
+        <span class="text-nowrap">${i.target.textContent}</span>
+        <span id="tag" class="flex-shrink-0">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+                fill="white" />
+          </svg>
+        </span>
+      </a>
+      `
     }
   }
 })
