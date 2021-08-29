@@ -26,7 +26,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// @ts-check
+            <pre class="prettyprint source linenums"><code>/* eslint-disable no-param-reassign */
+/* eslint-disable no-undef */
+// @ts-check
 
 /*
  * First search implementation - the simple
@@ -45,6 +47,18 @@ const dropdown = document.querySelectorAll(
  * @type {HTMLInputElement}
  */
 const mainSearch = document.querySelector('#search')
+
+/**
+ * Select the parent of all advance searches.
+ * @type {HTMLElement}
+ */
+const items = document.querySelector('#aSearch')
+
+/**
+ * Select parent of all tags elements.
+ * @type {HTMLElement}
+ */
+const listTags = document.querySelector('#forTags')
 
 /**
  * Array contains 3 others arrays for listing tag Ingredients, Appliances and ustensils
@@ -207,9 +221,10 @@ function generateList(list) {
 
   if (list.length > 0) {
     list.forEach((e) => {
+      // @ts-ignore
       const recipe = new Recipe(e)
       document.querySelector('#showRecipes').innerHTML += recipe.card()
-      e.ingredients.forEach((i) => {
+      e.ingredients.forEach((/** @type {{ ingredient: string; }} */ i) => {
         if (!allIngredients.includes(i.ingredient)) {
           allIngredients.push(i.ingredient)
         }
@@ -217,7 +232,7 @@ function generateList(list) {
       if (!allAppliances.includes(e.appliance)) {
         allAppliances.push(e.appliance)
       }
-      e.ustensils.forEach((u) => {
+      e.ustensils.forEach((/** @type {string} */ u) => {
         if (!allUstensils.includes(u)) {
           allUstensils.push(u)
         }
@@ -240,6 +255,54 @@ function generateList(list) {
 }
 
 /**
+ *
+ * @param {Array.&lt;Array.&lt;string>>} tags List of ingredients, appliances and ustensils each one in his table.
+ * @returns {Array} Array of filtered recipes
+ */
+function searchTag(tags) {
+  const nbi = tags[0].length
+  const nba = tags[1].length
+  const nbu = tags[2].length
+  const nbt = nbi + nba + nbu
+
+  if (recipesCopy.length === 0) {
+    // @ts-ignore
+    switchRecipes = recipes
+  } else {
+    switchRecipes = recipesCopy
+  }
+
+  recipesCopy = switchRecipes.filter((el) => {
+    let nbFind = 0
+    if (nbi > 0) {
+      el.ingredients.forEach((/** @type {{ ingredient: string; }} */ i) => {
+        if (tags[0].includes(i.ingredient.toLowerCase())) {
+          nbFind += 1
+        }
+      })
+    }
+    if (nba > 0) {
+      if (tags[1].includes(el.appliance.toLowerCase())) {
+        nbFind += 1
+      }
+    }
+    if (nbu > 0) {
+      el.ustensils.forEach((/** @type {string} */ u) => {
+        if (tags[2].includes(u.toLowerCase())) {
+          nbFind += 1
+        }
+      })
+    }
+
+    if (nbt === nbFind) {
+      return true
+    }
+    return false
+  })
+  return recipesCopy
+}
+
+/**
  * Listen the user entry in the main search input.
  */
 mainSearch.addEventListener('input', () => {
@@ -251,6 +314,7 @@ mainSearch.addEventListener('input', () => {
       tab[1].length === 0 &amp;&amp;
       tab[2].length === 0
     ) {
+      // @ts-ignore
       switchRecipes = recipes
     }
 
@@ -268,6 +332,7 @@ mainSearch.addEventListener('input', () => {
       tab[1].length === 0 &amp;&amp;
       tab[2].length === 0
     ) {
+      // @ts-ignore
       switchRecipes = recipes
     }
 
@@ -281,6 +346,7 @@ mainSearch.addEventListener('input', () => {
     saveSearchTerm = ''
     recipesCopy.length = 0
     if (tab[0].length === 0 &amp;&amp; tab[1].length === 0 &amp;&amp; tab[2].length === 0) {
+      // @ts-ignore
       generateList(recipes)
     } else {
       generateList(searchTag(tab))
@@ -291,6 +357,9 @@ mainSearch.addEventListener('input', () => {
   }
 })
 
+/**
+ * Listen for open and close buttons of advances search.
+ */
 dropdown.forEach(
   (e) =>
     e.addEventListener('click', () => {
@@ -382,67 +451,42 @@ dropdown.forEach(
   false
 )
 
-// Select filter tags
-const items = document.querySelector('#aSearch')
-
-function searchTag(tags) {
-  const nbi = tags[0].length
-  const nba = tags[1].length
-  const nbu = tags[2].length
-  const nbt = nbi + nba + nbu
-
-  if (recipesCopy.length === 0) {
-    switchRecipes = recipes
-  } else {
-    switchRecipes = recipesCopy
-  }
-
-  recipesCopy = switchRecipes.filter((el) => {
-    let nbFind = 0
-    if (nbi > 0) {
-      el.ingredients.forEach((i) => {
-        if (tags[0].includes(i.ingredient.toLowerCase())) {
-          nbFind += 1
-        }
-      })
-    }
-    if (nba > 0) {
-      if (tags[1].includes(el.appliance.toLowerCase())) {
-        nbFind += 1
-      }
-    }
-    if (nbu > 0) {
-      el.ustensils.forEach((u) => {
-        if (tags[2].includes(u.toLowerCase())) {
-          nbFind += 1
-        }
-      })
-    }
-
-    if (nbt === nbFind) {
-      return true
-    }
-  })
-  return recipesCopy
-}
-
+/**
+ * Listen for add tags of type ingredients, appliances or ustensils on page. Generate the html of tags.
+ */
 items.addEventListener('click', (i) => {
   if (i.target) {
     if (i.target.nodeName === 'SPAN' &amp;&amp; i.target.textContent) {
-      greatParentId =
+      /**
+       * Select the highest parent.
+       * @type {string}
+       */
+      const greatParentId =
         i.target.parentElement.parentElement.parentElement.parentElement.id
 
       if (greatParentId === 'ingredients') {
+        // @ts-ignore
         tab[0].push(i.target.textContent.toLowerCase())
       } else if (greatParentId === 'appliances') {
+        // @ts-ignore
         tab[1].push(i.target.textContent.toLowerCase())
       } else {
+        // @ts-ignore
         tab[2].push(i.target.textContent.toLowerCase())
+      }
+
+      /** @type {string} */
+      let tagsType = 'btn-primary'
+
+      if (greatParentId === 'appliances') {
+        tagsType = 'btn-success'
+      } else if (greatParentId === 'ustensils') {
+        tagsType = 'btn-danger'
       }
 
       generateList(searchTag(tab))
       document.querySelector('#forTags').innerHTML += `
-    &lt;a class="btn btn-primary my-btn--tag text-center" type="${greatParentId}">
+    &lt;a class="btn ${tagsType} my-btn--tag text-center my-btn--${greatParentId}" type="${greatParentId}">
       &lt;span class="text-nowrap">${i.target.textContent}&lt;/span>
       &lt;span id="tag" class="flex-shrink-0">
         &lt;svg width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -458,11 +502,76 @@ items.addEventListener('click', (i) => {
   }
 })
 
-// filter les tags
+/**
+ * Listen for remove tags of type ingredients, appliances or ustensils on page. Update the render.
+ */
+listTags.addEventListener('click', (e) => {
+  e.stopPropagation()
+  /** @type {HTMLElement} */
+  let parent
+  if (e.target.nodeName === 'svg') {
+    parent = e.target.parentElement.parentElement
+  } else if (e.target.nodeName === 'path') {
+    parent = e.target.parentElement.parentElement.parentElement
+  }
+
+  if (parent !== undefined) {
+    /** @type {number} */
+    let index
+
+    if (parent.getAttribute('type') === 'ingredients') {
+      index = 0
+    }
+    if (parent.getAttribute('type') === 'appliances') {
+      index = 1
+    }
+    if (parent.getAttribute('type') === 'ustensils') {
+      index = 2
+    }
+    const tabIndex = tab[index].indexOf(
+      parent.querySelector('span').textContent.toLowerCase()
+    )
+    if (tabIndex !== -1) {
+      tab[index].splice(tabIndex, 1)
+    }
+
+    if (
+      tab[0].length === 0 &amp;&amp;
+      tab[1].length === 0 &amp;&amp;
+      tab[2].length === 0 &amp;&amp;
+      saveSearchTerm !== ''
+    ) {
+      // @ts-ignore
+      recipesCopy = listFilter(recipes, saveSearchTerm)
+      generateList(recipesCopy)
+    } else if (
+      tab[0].length === 0 &amp;&amp;
+      tab[1].length === 0 &amp;&amp;
+      tab[2].length === 0 &amp;&amp;
+      saveSearchTerm === ''
+    ) {
+      recipesCopy.length = 0
+      // @ts-ignore
+      generateList(recipes)
+    } else {
+      recipesCopy.length = 0
+      generateList(searchTag(tab))
+    }
+
+    parent.remove()
+  }
+})
+
+/**
+ * Advance search. Filtered the list of ingredients, appliances and ustensils.
+ */
 items.addEventListener('input', (i) => {
   if (i.target.value.length > 2) {
+    /** @type {string} */
     const filter = i.target.value.toLowerCase()
+    /** @type {Array} */
     let targetList
+    /** @type {string} */
     let selector
 
     if (i.target.id === 'ing') {
@@ -494,63 +603,9 @@ items.addEventListener('input', (i) => {
   }
 })
 
-// Close filters tags
-const listTags = document.querySelector('#forTags')
-
-listTags.addEventListener('click', (e) => {
-  e.stopPropagation()
-  let parent
-  if (e.target.nodeName === 'svg') {
-    parent = e.target.parentElement.parentElement
-  } else if (e.target.nodeName === 'path') {
-    parent = e.target.parentElement.parentElement.parentElement
-  }
-
-  if (parent !== undefined) {
-    let index
-
-    if (parent.getAttribute('type') === 'ingredients') {
-      index = 0
-    }
-    if (parent.getAttribute('type') === 'appliances') {
-      index = 1
-    }
-    if (parent.getAttribute('type') === 'ustensils') {
-      index = 2
-    }
-    const tabIndex = tab[index].indexOf(
-      parent.querySelector('span').textContent.toLowerCase()
-    )
-    if (tabIndex !== -1) {
-      tab[index].splice(tabIndex, 1)
-    }
-
-    if (
-      tab[0].length === 0 &amp;&amp;
-      tab[1].length === 0 &amp;&amp;
-      tab[2].length === 0 &amp;&amp;
-      saveSearchTerm !== ''
-    ) {
-      recipesCopy = listFilter(recipes, saveSearchTerm)
-      generateList(recipesCopy)
-    } else if (
-      tab[0].length === 0 &amp;&amp;
-      tab[1].length === 0 &amp;&amp;
-      tab[2].length === 0 &amp;&amp;
-      saveSearchTerm === ''
-    ) {
-      recipesCopy.length = 0
-      generateList(recipes)
-    } else {
-      recipesCopy.length = 0
-      generateList(searchTag(tab))
-    }
-
-    parent.remove()
-  }
-})
-
+/** Generate the page with all recipes on loading */
 window.addEventListener('load', () => {
+  // @ts-ignore
   generateList(recipes)
 })
 </code></pre>
@@ -563,13 +618,13 @@ window.addEventListener('load', () => {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Recipe.html">Recipe</a></li></ul><h3>Global</h3><ul><li><a href="global.html#allAppliances">allAppliances</a></li><li><a href="global.html#allIngredients">allIngredients</a></li><li><a href="global.html#allUstensils">allUstensils</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#declencheur">declencheur</a></li><li><a href="global.html#dropdown">dropdown</a></li><li><a href="global.html#generateList">generateList</a></li><li><a href="global.html#listFilter">listFilter</a></li><li><a href="global.html#mainSearch">mainSearch</a></li><li><a href="global.html#recipes">recipes</a></li><li><a href="global.html#recipesCopy">recipesCopy</a></li><li><a href="global.html#saveSearchTerm">saveSearchTerm</a></li><li><a href="global.html#switchRecipes">switchRecipes</a></li><li><a href="global.html#tab">tab</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Recipe.html">Recipe</a></li></ul><h3>Global</h3><ul><li><a href="global.html#allAppliances">allAppliances</a></li><li><a href="global.html#allIngredients">allIngredients</a></li><li><a href="global.html#allUstensils">allUstensils</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#declencheur">declencheur</a></li><li><a href="global.html#dropdown">dropdown</a></li><li><a href="global.html#generateList">generateList</a></li><li><a href="global.html#items">items</a></li><li><a href="global.html#listFilter">listFilter</a></li><li><a href="global.html#listTags">listTags</a></li><li><a href="global.html#mainSearch">mainSearch</a></li><li><a href="global.html#recipes">recipes</a></li><li><a href="global.html#recipesCopy">recipesCopy</a></li><li><a href="global.html#saveSearchTerm">saveSearchTerm</a></li><li><a href="global.html#searchTag">searchTag</a></li><li><a href="global.html#switchRecipes">switchRecipes</a></li><li><a href="global.html#tab">tab</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Aug 29 2021 01:51:16 GMT+0200 (heure d’été d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Aug 29 2021 15:34:45 GMT+0200 (heure d’été d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

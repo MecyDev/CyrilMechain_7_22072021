@@ -196,7 +196,7 @@ function generateList(list) {
       // @ts-ignore
       const recipe = new Recipe(e)
       document.querySelector('#showRecipes').innerHTML += recipe.card()
-      e.ingredients.forEach((/** @type {{ ingredient: string; }} */ i) => {
+      e.ingredients.forEach((/** @type { {ingredient: string; }} */ i) => {
         if (!allIngredients.includes(i.ingredient)) {
           allIngredients.push(i.ingredient)
         }
