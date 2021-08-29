@@ -3,7 +3,7 @@
 // @ts-check
 
 /*
- * First search implementation - the simple
+ * Second search implementation - With simple Binary Search
  */
 
 /**

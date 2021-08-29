@@ -1,8 +1,11 @@
 /**
- * The class who represent a Recipe
+ * The class who represent a recipe
  */
-
 class Recipe {
+  /**
+   *
+   * @param {Array} recipe
+   */
   constructor(recipe) {
     this.id = recipe.id
     this.name = recipe.name
@@ -11,6 +14,11 @@ class Recipe {
     this.description = recipe.description
   }
 
+  /**
+   * Give the ingredient quantity and unit in one string.
+   * @param {Array} i
+   * @returns {string} Return a string of ingredient with quantity and unit.
+   */
   listIngredients(i) {
     let quantity = ''
     let unit = ''
@@ -23,6 +31,10 @@ class Recipe {
     return `${i.ingredient}: ${quantity} ${unit}`
   }
 
+  /**
+   *Make the recipe card html
+   * @returns {string} The html of the card
+   */
   card() {
     const card = `
     <div class="col mb-4">
