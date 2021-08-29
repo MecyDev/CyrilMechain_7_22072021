@@ -41,29 +41,80 @@ const dropdown = document.querySelectorAll(
 )
 
 /**
+ * Select the input of main search
+ * @type {HTMLInputElement}
+ */
+const mainSearch = document.querySelector('#search')
+
+/**
  * Array contains 3 others arrays for listing tag Ingredients, Appliances and ustensils
  * @type {Array.&lt;Array.&lt;string>>}
  */
 const tab = [[], [], []]
 
+/**
+ * Conntains a filtered copy of the recipes
+ * @type {Array}
+ */
 let recipesCopy = []
-let declencheur = false
-let switchRecipes
-let saveSearchTerm = ''
-const mainSearch = document.querySelector('#search')
 
+/**
+ * A switch to detect that the user input goes below 3 characters.
+ * @type {boolean}
+ */
+let declencheur = false
+
+/**
+ * A switch to detect whether to use the complete or filtered list of recipes.
+ * @type {Array}
+ */
+let switchRecipes
+
+/**
+ * Saving the user enter
+ * @type {string}
+ */
+let saveSearchTerm = ''
+
+const menuSize = 'w-75'
+
+/**
+ * lists of all recipes ingredients, appliances and ustensils of all recipes for the advance search.
+ * @type {Array}
+ */
+const allIngredients = []
+/** @type {Array} */
+const allAppliances = []
+/** @type {Array} */
+const allUstensils = []
+
+/**
+ * Filter the recipes according to the user's search.
+ * @param {Array} recipe List of recipes
+ * @param {string} word User entry
+ * @returns {Array} The list filtered with user entry or, if not find, the origin list past in paramater
+ */
 function listFilter(recipe, word) {
-  word = word
+  /**
+   * Transform word in an array of string words > 2
+   * @type {Array}
+   */
+  const arrayWord = word
     .toLowerCase()
     .split(' ')
     .filter((el) => el.length > 2)
 
+  /** @type {string} */
   let reg = ''
 
-  word.forEach((w) => {
+  arrayWord.forEach((w) => {
     reg += `(?=.*\\b${w.normalize('NFD').replace(/\p{Diacritic}/gu, '')})`
   })
 
+  /**
+   * Array of recipes corresponding to the search.
+   * @type {Array}
+   */
   const recipesFilter = []
 
   for (let i = 0; i &lt; recipe.length; i += 1) {
@@ -109,6 +160,88 @@ function listFilter(recipe, word) {
   return recipesCopy
 }
 
+/**
+ * Generate the html of list of ingredients, appliances or ustensils for advance search.
+ * @param {Array} list The list of ingredients or appliances or ustensils for create the list buttons of each
+ * @returns {string} The html for render
+ */
+function createList(list) {
+  let result = ''
+  let pointer = 2
+  let j = 0
+  for (let i = 0; i &lt; list.length; i += 3) {
+    let t = `&lt;ul class="list-group list-group-horizontal">`
+    for (j; j &lt;= pointer; j += 1) {
+      let item = list[j]
+      if (typeof list[j] === 'undefined') {
+        item = ''
+      }
+      t += `&lt;li class="list-group-item w-100 border-0 bg-transparent">&lt;a href="#" class="dropdown-item" title="${item}">&lt;span class="d-inline-block text-truncate" style="width: 10rem;">${item}&lt;/span>&lt;/a>&lt;/li>`
+    }
+    t += `&lt;/ul>`
+    pointer += 3
+    if (pointer > list.length) {
+      pointer = list.length - 1
+    }
+    result += t
+  }
+  return result
+}
+
+/**
+ * Generate html for each recipes and render on page.
+ * @param {Array} list List of recipes
+ * @returns void
+ */
+function generateList(list) {
+  document.querySelector('#ingredients').innerHTML = ''
+  document.querySelector('#ustensils').innerHTML = ''
+  document.querySelector('#appliances').innerHTML = ''
+  document
+    .querySelector('#showRecipes')
+    .classList.add('row-cols-1', 'row-cols-md-3')
+  document.querySelector('#showRecipes').innerHTML = ''
+  allIngredients.length = 0
+  allAppliances.length = 0
+  allUstensils.length = 0
+
+  if (list.length > 0) {
+    list.forEach((e) => {
+      const recipe = new Recipe(e)
+      document.querySelector('#showRecipes').innerHTML += recipe.card()
+      e.ingredients.forEach((i) => {
+        if (!allIngredients.includes(i.ingredient)) {
+          allIngredients.push(i.ingredient)
+        }
+      })
+      if (!allAppliances.includes(e.appliance)) {
+        allAppliances.push(e.appliance)
+      }
+      e.ustensils.forEach((u) => {
+        if (!allUstensils.includes(u)) {
+          allUstensils.push(u)
+        }
+      })
+    })
+    document.querySelector('#ingredients').innerHTML =
+      createList(allIngredients)
+    document.querySelector('#appliances').innerHTML = createList(allAppliances)
+    document.querySelector('#ustensils').innerHTML = createList(allUstensils)
+  } else {
+    document
+      .querySelector('#showRecipes')
+      .classList.remove('row-cols-1', 'row-cols-md-3')
+
+    document.querySelector(
+      '#showRecipes'
+    ).innerHTML = `&lt;div class="col">Aucune recette ne correspond à votre critère… vous pouvez
+    chercher « tarte aux pommes », « poisson », « coco » « lait » etc...&lt;/div>`
+  }
+}
+
+/**
+ * Listen the user entry in the main search input.
+ */
 mainSearch.addEventListener('input', () => {
   if (mainSearch.value.length > 2) {
     saveSearchTerm = mainSearch.value
@@ -157,10 +290,6 @@ mainSearch.addEventListener('input', () => {
     }
   }
 })
-
-// interaction on page
-
-const menuSize = 'w-75'
 
 dropdown.forEach(
   (e) =>
@@ -252,82 +381,6 @@ dropdown.forEach(
     }),
   false
 )
-
-// create ingredient list
-const allIngredients = []
-const allAppliances = []
-const allUstensils = []
-
-function generateList(list) {
-  document.querySelector('#ingredients').innerHTML = ''
-  document.querySelector('#ustensils').innerHTML = ''
-  document.querySelector('#appliances').innerHTML = ''
-  document
-    .querySelector('#showRecipes')
-    .classList.add('row-cols-1', 'row-cols-md-3')
-  document.querySelector('#showRecipes').innerHTML = ''
-  allIngredients.length = 0
-  allAppliances.length = 0
-  allUstensils.length = 0
-
-  if (list.length > 0) {
-    list.forEach((e) => {
-      const recipe = new Recipe(e)
-      document.querySelector('#showRecipes').innerHTML += recipe.card()
-      e.ingredients.forEach((i) => {
-        if (!allIngredients.includes(i.ingredient)) {
-          allIngredients.push(i.ingredient)
-        }
-      })
-      if (!allAppliances.includes(e.appliance)) {
-        allAppliances.push(e.appliance)
-      }
-      e.ustensils.forEach((u) => {
-        if (!allUstensils.includes(u)) {
-          allUstensils.push(u)
-        }
-      })
-    })
-    document.querySelector('#ingredients').innerHTML =
-      createList(allIngredients)
-    document.querySelector('#appliances').innerHTML = createList(allAppliances)
-    document.querySelector('#ustensils').innerHTML = createList(allUstensils)
-  } else {
-    document
-      .querySelector('#showRecipes')
-      .classList.remove('row-cols-1', 'row-cols-md-3')
-
-    document.querySelector(
-      '#showRecipes'
-    ).innerHTML = `&lt;div class="col">Aucune recette ne correspond à votre critère… vous pouvez
-    chercher « tarte aux pommes », « poisson », « coco » « lait » etc...&lt;/div>`
-  }
-}
-
-// create list ul of ingredient
-
-function createList(list) {
-  let result = ''
-  let pointer = 2
-  let j = 0
-  for (let i = 0; i &lt; list.length; i += 3) {
-    let t = `&lt;ul class="list-group list-group-horizontal">`
-    for (j; j &lt;= pointer; j += 1) {
-      let item = list[j]
-      if (typeof list[j] === 'undefined') {
-        item = ''
-      }
-      t += `&lt;li class="list-group-item w-100 border-0 bg-transparent">&lt;a href="#" class="dropdown-item" title="${item}">&lt;span class="d-inline-block text-truncate" style="width: 10rem;">${item}&lt;/span>&lt;/a>&lt;/li>`
-    }
-    t += `&lt;/ul>`
-    pointer += 3
-    if (pointer > list.length) {
-      pointer = list.length - 1
-    }
-    result += t
-  }
-  return result
-}
 
 // Select filter tags
 const items = document.querySelector('#aSearch')
@@ -510,13 +563,13 @@ window.addEventListener('load', () => {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Recipe.html">Recipe</a></li></ul><h3>Global</h3><ul><li><a href="global.html#dropdown">dropdown</a></li><li><a href="global.html#tab">tab</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Recipe.html">Recipe</a></li></ul><h3>Global</h3><ul><li><a href="global.html#allAppliances">allAppliances</a></li><li><a href="global.html#allIngredients">allIngredients</a></li><li><a href="global.html#allUstensils">allUstensils</a></li><li><a href="global.html#createList">createList</a></li><li><a href="global.html#declencheur">declencheur</a></li><li><a href="global.html#dropdown">dropdown</a></li><li><a href="global.html#generateList">generateList</a></li><li><a href="global.html#listFilter">listFilter</a></li><li><a href="global.html#mainSearch">mainSearch</a></li><li><a href="global.html#recipes">recipes</a></li><li><a href="global.html#recipesCopy">recipesCopy</a></li><li><a href="global.html#saveSearchTerm">saveSearchTerm</a></li><li><a href="global.html#switchRecipes">switchRecipes</a></li><li><a href="global.html#tab">tab</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Aug 28 2021 18:09:30 GMT+0200 (heure d’été d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Aug 29 2021 01:51:16 GMT+0200 (heure d’été d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

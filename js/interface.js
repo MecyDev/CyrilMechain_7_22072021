@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-undef */
 // @ts-check
 
 /*
@@ -13,29 +15,92 @@ const dropdown = document.querySelectorAll(
 )
 
 /**
+ * Select the input of main search
+ * @type {HTMLInputElement}
+ */
+const mainSearch = document.querySelector('#search')
+
+/**
+ * Select the parent of all advance searches.
+ * @type {HTMLElement}
+ */
+const items = document.querySelector('#aSearch')
+
+/**
+ * Select parent of all tags elements.
+ * @type {HTMLElement}
+ */
+const listTags = document.querySelector('#forTags')
+
+/**
  * Array contains 3 others arrays for listing tag Ingredients, Appliances and ustensils
  * @type {Array.<Array.<string>>}
  */
 const tab = [[], [], []]
 
+/**
+ * Conntains a filtered copy of the recipes
+ * @type {Array}
+ */
 let recipesCopy = []
-let declencheur = false
-let switchRecipes
-let saveSearchTerm = ''
-const mainSearch = document.querySelector('#search')
 
+/**
+ * A switch to detect that the user input goes below 3 characters.
+ * @type {boolean}
+ */
+let declencheur = false
+
+/**
+ * A switch to detect whether to use the complete or filtered list of recipes.
+ * @type {Array}
+ */
+let switchRecipes
+
+/**
+ * Saving the user enter
+ * @type {string}
+ */
+let saveSearchTerm = ''
+
+const menuSize = 'w-75'
+
+/**
+ * lists of all recipes ingredients, appliances and ustensils of all recipes for the advance search.
+ * @type {Array}
+ */
+const allIngredients = []
+/** @type {Array} */
+const allAppliances = []
+/** @type {Array} */
+const allUstensils = []
+
+/**
+ * Filter the recipes according to the user's search.
+ * @param {Array} recipe List of recipes
+ * @param {string} word User entry
+ * @returns {Array} The list filtered with user entry or, if not find, the origin list past in paramater
+ */
 function listFilter(recipe, word) {
-  word = word
+  /**
+   * Transform word in an array of string words > 2
+   * @type {Array}
+   */
+  const arrayWord = word
     .toLowerCase()
     .split(' ')
     .filter((el) => el.length > 2)
 
+  /** @type {string} */
   let reg = ''
 
-  word.forEach((w) => {
+  arrayWord.forEach((w) => {
     reg += `(?=.*\\b${w.normalize('NFD').replace(/\p{Diacritic}/gu, '')})`
   })
 
+  /**
+   * Array of recipes corresponding to the search.
+   * @type {Array}
+   */
   const recipesFilter = []
 
   for (let i = 0; i < recipe.length; i += 1) {
@@ -81,6 +146,137 @@ function listFilter(recipe, word) {
   return recipesCopy
 }
 
+/**
+ * Generate the html of list of ingredients, appliances or ustensils for advance search.
+ * @param {Array} list The list of ingredients or appliances or ustensils for create the list buttons of each
+ * @returns {string} The html for render
+ */
+function createList(list) {
+  let result = ''
+  let pointer = 2
+  let j = 0
+  for (let i = 0; i < list.length; i += 3) {
+    let t = `<ul class="list-group list-group-horizontal">`
+    for (j; j <= pointer; j += 1) {
+      let item = list[j]
+      if (typeof list[j] === 'undefined') {
+        item = ''
+      }
+      t += `<li class="list-group-item w-100 border-0 bg-transparent"><a href="#" class="dropdown-item" title="${item}"><span class="d-inline-block text-truncate" style="width: 10rem;">${item}</span></a></li>`
+    }
+    t += `</ul>`
+    pointer += 3
+    if (pointer > list.length) {
+      pointer = list.length - 1
+    }
+    result += t
+  }
+  return result
+}
+
+/**
+ * Generate html for each recipes and render on page.
+ * @param {Array} list List of recipes
+ * @returns void
+ */
+function generateList(list) {
+  document.querySelector('#ingredients').innerHTML = ''
+  document.querySelector('#ustensils').innerHTML = ''
+  document.querySelector('#appliances').innerHTML = ''
+  document
+    .querySelector('#showRecipes')
+    .classList.add('row-cols-1', 'row-cols-md-3')
+  document.querySelector('#showRecipes').innerHTML = ''
+  allIngredients.length = 0
+  allAppliances.length = 0
+  allUstensils.length = 0
+
+  if (list.length > 0) {
+    list.forEach((e) => {
+      // @ts-ignore
+      const recipe = new Recipe(e)
+      document.querySelector('#showRecipes').innerHTML += recipe.card()
+      e.ingredients.forEach((/** @type {{ ingredient: string; }} */ i) => {
+        if (!allIngredients.includes(i.ingredient)) {
+          allIngredients.push(i.ingredient)
+        }
+      })
+      if (!allAppliances.includes(e.appliance)) {
+        allAppliances.push(e.appliance)
+      }
+      e.ustensils.forEach((/** @type {string} */ u) => {
+        if (!allUstensils.includes(u)) {
+          allUstensils.push(u)
+        }
+      })
+    })
+    document.querySelector('#ingredients').innerHTML =
+      createList(allIngredients)
+    document.querySelector('#appliances').innerHTML = createList(allAppliances)
+    document.querySelector('#ustensils').innerHTML = createList(allUstensils)
+  } else {
+    document
+      .querySelector('#showRecipes')
+      .classList.remove('row-cols-1', 'row-cols-md-3')
+
+    document.querySelector(
+      '#showRecipes'
+    ).innerHTML = `<div class="col">Aucune recette ne correspond à votre critère… vous pouvez
+    chercher « tarte aux pommes », « poisson », « coco » « lait » etc...</div>`
+  }
+}
+
+/**
+ *
+ * @param {Array.<Array.<string>>} tags List of ingredients, appliances and ustensils each one in his table.
+ * @returns {Array} Array of filtered recipes
+ */
+function searchTag(tags) {
+  const nbi = tags[0].length
+  const nba = tags[1].length
+  const nbu = tags[2].length
+  const nbt = nbi + nba + nbu
+
+  if (recipesCopy.length === 0) {
+    // @ts-ignore
+    switchRecipes = recipes
+  } else {
+    switchRecipes = recipesCopy
+  }
+
+  recipesCopy = switchRecipes.filter((el) => {
+    let nbFind = 0
+    if (nbi > 0) {
+      el.ingredients.forEach((/** @type {{ ingredient: string; }} */ i) => {
+        if (tags[0].includes(i.ingredient.toLowerCase())) {
+          nbFind += 1
+        }
+      })
+    }
+    if (nba > 0) {
+      if (tags[1].includes(el.appliance.toLowerCase())) {
+        nbFind += 1
+      }
+    }
+    if (nbu > 0) {
+      el.ustensils.forEach((/** @type {string} */ u) => {
+        if (tags[2].includes(u.toLowerCase())) {
+          nbFind += 1
+        }
+      })
+    }
+
+    if (nbt === nbFind) {
+      return true
+    }
+    return false
+  })
+  return recipesCopy
+}
+
+/**
+ * Listen the user entry in the main search input.
+ */
 mainSearch.addEventListener('input', () => {
   if (mainSearch.value.length > 2) {
     saveSearchTerm = mainSearch.value
@@ -90,6 +286,7 @@ mainSearch.addEventListener('input', () => {
       tab[1].length === 0 &&
       tab[2].length === 0
     ) {
+      // @ts-ignore
       switchRecipes = recipes
     }
 
@@ -107,6 +304,7 @@ mainSearch.addEventListener('input', () => {
       tab[1].length === 0 &&
       tab[2].length === 0
     ) {
+      // @ts-ignore
       switchRecipes = recipes
     }
 
@@ -120,6 +318,7 @@ mainSearch.addEventListener('input', () => {
     saveSearchTerm = ''
     recipesCopy.length = 0
     if (tab[0].length === 0 && tab[1].length === 0 && tab[2].length === 0) {
+      // @ts-ignore
       generateList(recipes)
     } else {
       generateList(searchTag(tab))
@@ -130,10 +329,9 @@ mainSearch.addEventListener('input', () => {
   }
 })
 
-// interaction on page
-
-const menuSize = 'w-75'
-
+/**
+ * Listen for open and close buttons of advances search.
+ */
 dropdown.forEach(
   (e) =>
     e.addEventListener('click', () => {
@@ -225,137 +423,27 @@ dropdown.forEach(
   false
 )
 
-// create ingredient list
-const allIngredients = []
-const allAppliances = []
-const allUstensils = []
-
-function generateList(list) {
-  document.querySelector('#ingredients').innerHTML = ''
-  document.querySelector('#ustensils').innerHTML = ''
-  document.querySelector('#appliances').innerHTML = ''
-  document
-    .querySelector('#showRecipes')
-    .classList.add('row-cols-1', 'row-cols-md-3')
-  document.querySelector('#showRecipes').innerHTML = ''
-  allIngredients.length = 0
-  allAppliances.length = 0
-  allUstensils.length = 0
-
-  if (list.length > 0) {
-    list.forEach((e) => {
-      const recipe = new Recipe(e)
-      document.querySelector('#showRecipes').innerHTML += recipe.card()
-      e.ingredients.forEach((i) => {
-        if (!allIngredients.includes(i.ingredient)) {
-          allIngredients.push(i.ingredient)
-        }
-      })
-      if (!allAppliances.includes(e.appliance)) {
-        allAppliances.push(e.appliance)
-      }
-      e.ustensils.forEach((u) => {
-        if (!allUstensils.includes(u)) {
-          allUstensils.push(u)
-        }
-      })
-    })
-    document.querySelector('#ingredients').innerHTML =
-      createList(allIngredients)
-    document.querySelector('#appliances').innerHTML = createList(allAppliances)
-    document.querySelector('#ustensils').innerHTML = createList(allUstensils)
-  } else {
-    document
-      .querySelector('#showRecipes')
-      .classList.remove('row-cols-1', 'row-cols-md-3')
-
-    document.querySelector(
-      '#showRecipes'
-    ).innerHTML = `<div class="col">Aucune recette ne correspond à votre critère… vous pouvez
-    chercher « tarte aux pommes », « poisson », « coco » « lait » etc...</div>`
-  }
-}
-
-// create list ul of ingredient
-
-function createList(list) {
-  let result = ''
-  let pointer = 2
-  let j = 0
-  for (let i = 0; i < list.length; i += 3) {
-    let t = `<ul class="list-group list-group-horizontal">`
-    for (j; j <= pointer; j += 1) {
-      let item = list[j]
-      if (typeof list[j] === 'undefined') {
-        item = ''
-      }
-      t += `<li class="list-group-item w-100 border-0 bg-transparent"><a href="#" class="dropdown-item" title="${item}"><span class="d-inline-block text-truncate" style="width: 10rem;">${item}</span></a></li>`
-    }
-    t += `</ul>`
-    pointer += 3
-    if (pointer > list.length) {
-      pointer = list.length - 1
-    }
-    result += t
-  }
-  return result
-}
-
-// Select filter tags
-const items = document.querySelector('#aSearch')
-
-function searchTag(tags) {
-  const nbi = tags[0].length
-  const nba = tags[1].length
-  const nbu = tags[2].length
-  const nbt = nbi + nba + nbu
-
-  if (recipesCopy.length === 0) {
-    switchRecipes = recipes
-  } else {
-    switchRecipes = recipesCopy
-  }
-
-  recipesCopy = switchRecipes.filter((el) => {
-    let nbFind = 0
-    if (nbi > 0) {
-      el.ingredients.forEach((i) => {
-        if (tags[0].includes(i.ingredient.toLowerCase())) {
-          nbFind += 1
-        }
-      })
-    }
-    if (nba > 0) {
-      if (tags[1].includes(el.appliance.toLowerCase())) {
-        nbFind += 1
-      }
-    }
-    if (nbu > 0) {
-      el.ustensils.forEach((u) => {
-        if (tags[2].includes(u.toLowerCase())) {
-          nbFind += 1
-        }
-      })
-    }
-
-    if (nbt === nbFind) {
-      return true
-    }
-  })
-  return recipesCopy
-}
-
+/**
+ * Listen for add tags of type ingredients, appliances or ustensils on page. Generate the html of tags.
+ */
 items.addEventListener('click', (i) => {
   if (i.target) {
     if (i.target.nodeName === 'SPAN' && i.target.textContent) {
-      greatParentId =
+      /**
+       * Select the highest parent.
+       * @type {string}
+       */
+      const greatParentId =
         i.target.parentElement.parentElement.parentElement.parentElement.id
 
       if (greatParentId === 'ingredients') {
+        // @ts-ignore
         tab[0].push(i.target.textContent.toLowerCase())
       } else if (greatParentId === 'appliances') {
+        // @ts-ignore
         tab[1].push(i.target.textContent.toLowerCase())
       } else {
+        // @ts-ignore
         tab[2].push(i.target.textContent.toLowerCase())
       }
 
@@ -377,11 +465,76 @@ items.addEventListener('click', (i) => {
   }
 })
 
-// filter les tags
+/**
+ * Listen for remove tags of type ingredients, appliances or ustensils on page. Update the render.
+ */
+listTags.addEventListener('click', (e) => {
+  e.stopPropagation()
+  /** @type {HTMLElement} */
+  let parent
+  if (e.target.nodeName === 'svg') {
+    parent = e.target.parentElement.parentElement
+  } else if (e.target.nodeName === 'path') {
+    parent = e.target.parentElement.parentElement.parentElement
+  }
+
+  if (parent !== undefined) {
+    /** @type {number} */
+    let index
+
+    if (parent.getAttribute('type') === 'ingredients') {
+      index = 0
+    }
+    if (parent.getAttribute('type') === 'appliances') {
+      index = 1
+    }
+    if (parent.getAttribute('type') === 'ustensils') {
+      index = 2
+    }
+    const tabIndex = tab[index].indexOf(
+      parent.querySelector('span').textContent.toLowerCase()
+    )
+    if (tabIndex !== -1) {
+      tab[index].splice(tabIndex, 1)
+    }
+
+    if (
+      tab[0].length === 0 &&
+      tab[1].length === 0 &&
+      tab[2].length === 0 &&
+      saveSearchTerm !== ''
+    ) {
+      // @ts-ignore
+      recipesCopy = listFilter(recipes, saveSearchTerm)
+      generateList(recipesCopy)
+    } else if (
+      tab[0].length === 0 &&
+      tab[1].length === 0 &&
+      tab[2].length === 0 &&
+      saveSearchTerm === ''
+    ) {
+      recipesCopy.length = 0
+      // @ts-ignore
+      generateList(recipes)
+    } else {
+      recipesCopy.length = 0
+      generateList(searchTag(tab))
+    }
+
+    parent.remove()
+  }
+})
+
+/**
+ * Advance search. Filtered the list of ingredients, appliances and ustensils.
+ */
 items.addEventListener('input', (i) => {
   if (i.target.value.length > 2) {
+    /** @type {string} */
     const filter = i.target.value.toLowerCase()
+    /** @type {Array} */
     let targetList
+    /** @type {string} */
     let selector
 
     if (i.target.id === 'ing') {
@@ -413,62 +566,8 @@ items.addEventListener('input', (i) => {
   }
 })
 
-// Close filters tags
-const listTags = document.querySelector('#forTags')
-
-listTags.addEventListener('click', (e) => {
-  e.stopPropagation()
-  let parent
-  if (e.target.nodeName === 'svg') {
-    parent = e.target.parentElement.parentElement
-  } else if (e.target.nodeName === 'path') {
-    parent = e.target.parentElement.parentElement.parentElement
-  }
-
-  if (parent !== undefined) {
-    let index
-
-    if (parent.getAttribute('type') === 'ingredients') {
-      index = 0
-    }
-    if (parent.getAttribute('type') === 'appliances') {
-      index = 1
-    }
-    if (parent.getAttribute('type') === 'ustensils') {
-      index = 2
-    }
-    const tabIndex = tab[index].indexOf(
-      parent.querySelector('span').textContent.toLowerCase()
-    )
-    if (tabIndex !== -1) {
-      tab[index].splice(tabIndex, 1)
-    }
-
-    if (
-      tab[0].length === 0 &&
-      tab[1].length === 0 &&
-      tab[2].length === 0 &&
-      saveSearchTerm !== ''
-    ) {
-      recipesCopy = listFilter(recipes, saveSearchTerm)
-      generateList(recipesCopy)
-    } else if (
-      tab[0].length === 0 &&
-      tab[1].length === 0 &&
-      tab[2].length === 0 &&
-      saveSearchTerm === ''
-    ) {
-      recipesCopy.length = 0
-      generateList(recipes)
-    } else {
-      recipesCopy.length = 0
-      generateList(searchTag(tab))
-    }
-
-    parent.remove()
-  }
-})
-
+/** Generate the page with all recipes on loading */
 window.addEventListener('load', () => {
+  // @ts-ignore
   generateList(recipes)
 })
