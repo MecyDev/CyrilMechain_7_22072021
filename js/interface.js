@@ -3,7 +3,7 @@
 // @ts-check
 
 /*
- * First search implementation - the simple
+ * First search implementation - Regex and native JS search function
  */
 
 /**
