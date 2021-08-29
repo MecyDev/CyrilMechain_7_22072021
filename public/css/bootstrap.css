@@ -10019,6 +10019,12 @@ h3 {
 .my-btn--tag svg {
   margin-right: -10px;
 }
+.my-btn--ingredients, .my-btn--appliances, .my-btn--ustensils {
+  color: white;
+}
+.my-btn--ingredients:hover, .my-btn--appliances:hover, .my-btn--ustensils:hover {
+  color: white;
+}
 .my-btn span {
   display: block;
   width: 100%;
@@ -10031,7 +10037,6 @@ h3 {
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active,
-.btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   background-color: #3282f7;
   border-color: #3282f7;
@@ -10040,7 +10045,6 @@ h3 {
 .btn-success:hover,
 .btn-success:focus,
 .btn-success:not(:disabled):not(.disabled):active,
-.btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle {
   background-color: #68d9a4;
   border-color: #68d9a4;
@@ -10050,7 +10054,6 @@ h3 {
 .btn-danger:focus,
 .btn-danger:focus,
 .btn-danger:not(:disabled):not(.disabled):active,
-.btn-danger:not(:disabled):not(.disabled).active,
 .show > .btn-danger.dropdown-toggle {
   background-color: #ed6454;
   border-color: #ed6454;

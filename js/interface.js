@@ -447,9 +447,18 @@ items.addEventListener('click', (i) => {
         tab[2].push(i.target.textContent.toLowerCase())
       }
 
+      /** @type {string} */
+      let tagsType = 'btn-primary'
+
+      if (greatParentId === 'appliances') {
+        tagsType = 'btn-success'
+      } else if (greatParentId === 'ustensils') {
+        tagsType = 'btn-danger'
+      }
+
       generateList(searchTag(tab))
       document.querySelector('#forTags').innerHTML += `
-    <a class="btn btn-primary my-btn--tag text-center" type="${greatParentId}">
+    <a class="btn ${tagsType} my-btn--tag text-center my-btn--${greatParentId}" type="${greatParentId}">
       <span class="text-nowrap">${i.target.textContent}</span>
       <span id="tag" class="flex-shrink-0">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none"

@@ -38,6 +38,16 @@
     }
   }
 
+  &--ingredients,
+  &--appliances,
+  &--ustensils {
+    color: white;
+
+    &:hover {
+      color: white;
+    }
+  }
+
   span {
     display: block;
     width: 100%;
@@ -54,7 +64,6 @@
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active,
-.btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   background-color: $blue;
   border-color: $blue;
@@ -63,7 +72,6 @@
 .btn-success:hover,
 .btn-success:focus,
 .btn-success:not(:disabled):not(.disabled):active,
-.btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle {
   background-color: $green;
   border-color: $green;
@@ -73,7 +81,6 @@
 .btn-danger:focus,
 .btn-danger:focus,
 .btn-danger:not(:disabled):not(.disabled):active,
-.btn-danger:not(:disabled):not(.disabled).active,
 .show > .btn-danger.dropdown-toggle {
   background-color: $red;
   border-color: $red;
